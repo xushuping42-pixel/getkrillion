@@ -58,7 +58,9 @@ async function todayPrompts(bank, key) {
 
 function render(state) {
   const root = $('#game');
+  const keepFocus = document.activeElement?.matches('input');
   root.innerHTML = '';
+  root.classList.toggle('is-complete', state.done);
   const card = el('div', 'card');
 
   const progress = el('div', 'dots');
@@ -76,17 +78,24 @@ function render(state) {
 
   const head = el('div', 'row head');
   head.appendChild(el('span', 'pill', 'Prompt ' + (state.cur + 1) + '/' + PER_ROUND));
-  head.appendChild(el('span', 'pill', state.total + '/' + MAX_SCORE));
+  head.appendChild(el('span', 'pill score-pill', state.total + ' / ' + MAX_SCORE + ' pts'));
   card.appendChild(head);
 
   if (!state.done) {
     const q = state.prompt;
-    card.appendChild(el('p', 'prompt', q.p));
-    card.appendChild(el('p', 'cat', q.cat || q.c || 'Trivia'));
+    const question = el('div', 'question');
+    question.appendChild(el('span', 'cat', q.cat || q.c || 'Trivia'));
+    question.appendChild(el('h2', 'prompt', q.p));
+    card.appendChild(question);
 
     const tries = state.tries;
     const left = MAX_TRIES - tries.length;
-    card.appendChild(el('p', 'tries', left + ' tries left'));
+    const attempts = el('div', 'tries');
+    const tokens = el('span', 'attempt-tokens');
+    tokens.setAttribute('aria-hidden', 'true');
+    for (let i = 0; i < MAX_TRIES; i++) tokens.appendChild(el('i', 'attempt-token' + (tries[i] ? tries[i].hit ? ' hit' : ' miss' : '')));
+    attempts.append(tokens, el('span', '', left + (left === 1 ? ' guess remaining' : ' guesses remaining')));
+    card.appendChild(attempts);
 
     const input = el('input', 'answer');
     input.type = 'text';
@@ -99,17 +108,19 @@ function render(state) {
 
     const btn = el('button', 'go', 'Submit');
     btn.type = 'button';
-    const inputRow = el('div', 'row');
+    const inputRow = el('div', 'row input-row');
     inputRow.append(input, btn);
     card.appendChild(inputRow);
 
-    const msg = el('p', 'msg', state.message || '');
+    const msg = el('p', 'msg ' + (state.messageType || ''), state.message || '');
+    msg.setAttribute('aria-live', 'polite');
     msg.setAttribute('role', 'status');
     card.appendChild(msg);
+    if (!tries.length) card.appendChild(el('p', 'input-help', 'Type an answer and press Enter ↵'));
 
     if (tries.length) {
       const list = el('ul', 'tries-list');
-      tries.forEach(t => list.appendChild(el('li', t.hit ? 'hit' : 'miss', t.text + (t.hit ? ' ✓' : ' ✗'))));
+      tries.forEach(t => { const item = el('li', t.hit ? 'hit' : 'miss'); item.append(el('span', '', t.text), el('span', 'answer-status', t.hit ? 'Accepted ✓' : 'Not on the list')); list.appendChild(item); });
       card.appendChild(list);
     }
 
@@ -120,19 +131,16 @@ function render(state) {
       input.value = '';
       state.message = r && r.duplicate ? 'Already counted — try a different answer' :
         r && r.hit ? 'Nice — ' + r.points + ' pts' : 'Not on the list';
-      if (r && r.roundDone) { state.message = ''; render(state); }
-      else {
-        msg.textContent = (r && r.hit) ? 'Nice — ' + r.points + ' pts' : 'Not on the list';
-        msg.className = 'msg ' + ((r && r.hit) ? 'ok' : 'bad');
-        if (left === 0) render(state);
-        else render(state);
-      }
+      state.messageType = r && !r.duplicate ? r.hit ? 'good' : 'bad' : '';
+      if (r && r.roundDone) { state.message = ''; state.messageType = ''; }
+      render(state);
     };
     btn.addEventListener('click', submit);
     input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); submit(); } });
-    setTimeout(() => input.focus({ preventScroll: true }), 30);
+    if (keepFocus || matchMedia('(pointer:fine)').matches) input.focus({ preventScroll: true });
   } else {
-    card.appendChild(el('p', 'prompt', 'Round over'));
+    card.appendChild(el('p', 'eyebrow', state.practice ? 'PRACTICE ROUND COMPLETE' : 'DAILY ROUND COMPLETE'));
+    card.appendChild(el('h2', 'result-title', state.total >= MAX_SCORE * 0.8 ? 'Nicely played.' : 'Every guess counts.'));
     const score = state.scores.reduce((a, b) => a + b, 0);
     const scoreLine = el('p', 'score', String(score));
     scoreLine.appendChild(el('small', '', '/' + MAX_SCORE));
@@ -160,7 +168,7 @@ function render(state) {
 
     const nb = el('button', 'wide', 'Next round · practice');
     nb.type = 'button';
-    nb.addEventListener('click', () => { state.next(); render(state); });
+    nb.addEventListener('click', () => { state.next(); state.message = ''; state.messageType = ''; render(state); });
 
     const sb = el('button', 'primary', 'Share result');
     sb.type = 'button';
