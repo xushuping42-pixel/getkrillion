@@ -61,6 +61,19 @@ function render(state) {
   root.innerHTML = '';
   const card = el('div', 'card');
 
+  const progress = el('div', 'dots');
+  progress.setAttribute('role', 'progressbar');
+  progress.setAttribute('aria-label', 'Completed prompts');
+  progress.setAttribute('aria-valuemin', '0');
+  progress.setAttribute('aria-valuemax', String(PER_ROUND));
+  progress.setAttribute('aria-valuenow', String(state.done ? PER_ROUND : state.cur));
+  for (let i = 0; i < PER_ROUND; i++) {
+    const dot = el('span', 'dot' + (state.done || i < state.cur ? ' ok' : i === state.cur ? ' now' : ''));
+    dot.setAttribute('aria-hidden', 'true');
+    progress.appendChild(dot);
+  }
+  card.appendChild(progress);
+
   const head = el('div', 'row head');
   head.appendChild(el('span', 'pill', 'Prompt ' + (state.cur + 1) + '/' + PER_ROUND));
   head.appendChild(el('span', 'pill', state.total + '/' + MAX_SCORE));
@@ -83,11 +96,12 @@ function render(state) {
     input.placeholder = 'Type your answer…';
     input.setAttribute('aria-label', 'Your answer');
     input.enterKeyHint = 'go';
-    card.appendChild(input);
 
     const btn = el('button', 'go', 'Submit');
     btn.type = 'button';
-    card.appendChild(btn);
+    const inputRow = el('div', 'row');
+    inputRow.append(input, btn);
+    card.appendChild(inputRow);
 
     const msg = el('p', 'msg', state.message || '');
     msg.setAttribute('role', 'status');
@@ -120,21 +134,48 @@ function render(state) {
   } else {
     card.appendChild(el('p', 'prompt', 'Round over'));
     const score = state.scores.reduce((a, b) => a + b, 0);
-    card.appendChild(el('p', 'final', score + '/' + MAX_SCORE));
+    const scoreLine = el('p', 'score', String(score));
+    scoreLine.appendChild(el('small', '', '/' + MAX_SCORE));
+    card.appendChild(scoreLine);
 
-    const nb = el('button', 'go', 'Next round · practice');
+    const grid = el('div', 'grid');
+    grid.setAttribute('role', 'list');
+    grid.setAttribute('aria-label', 'Scores by prompt');
+    state.scores.forEach((points, i) => {
+      const cell = el('i', points >= 90 ? 'g' : points >= 60 ? 'y' : points >= 30 ? 'o' : '', String(points));
+      cell.setAttribute('role', 'listitem');
+      cell.setAttribute('aria-label', 'Prompt ' + (i + 1) + ': ' + points + ' points');
+      grid.appendChild(cell);
+    });
+    card.appendChild(grid);
+
+    if (state.result) {
+      const best = el('p', 'best', 'Best ' + state.result.best + (state.result.streak > 1 ? ' · ' + state.result.streak + '-day streak' : ''));
+      if (state.result.isNew) best.prepend(el('span', 'newbest', 'New best! '));
+      card.appendChild(best);
+    }
+    const text = buildShare(state, state.dayKey);
+    card.appendChild(el('pre', 'share', text));
+    const buttons = el('div', 'btns');
+
+    const nb = el('button', 'wide', 'Next round · practice');
     nb.type = 'button';
     nb.addEventListener('click', () => { state.next(); render(state); });
-    card.appendChild(nb);
 
-    const sb = el('button', 'ghost', 'Share result');
+    const sb = el('button', 'primary', 'Share result');
     sb.type = 'button';
     sb.addEventListener('click', async () => {
-      const text = buildShare(state, state.dayKey);
       const ok = await shareText(text, 'krillion unlimited');
-      if (ok) sb.textContent = 'Copied ✓';
+      if (ok) sb.textContent = 'Shared ✓';
     });
-    card.appendChild(sb);
+    const cb = el('button', '', 'Copy result');
+    cb.type = 'button';
+    cb.addEventListener('click', async () => {
+      const ok = await copyText(text);
+      cb.textContent = ok ? 'Copied ✓' : 'Copy unavailable';
+    });
+    buttons.append(sb, cb, nb);
+    card.appendChild(buttons);
   }
 
   root.appendChild(card);
@@ -171,8 +212,8 @@ async function boot() {
   state.next = function () {
     const restarting = this.done;
     oc && oc.apply(this, arguments);
-    if (restarting) this.practice = true;
-    if (this.done && !this.practice) finish(this, key, prev);
+    if (restarting) { this.practice = true; this.result = null; }
+    if (this.done && !this.practice) this.result = finish(this, key, prev);
   };
 
   render(state);

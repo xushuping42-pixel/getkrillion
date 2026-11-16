@@ -1,5 +1,5 @@
 // tools/make-schedule.mjs —— 由题库生成确定性排期，可重跑、结果一致
-// 用法：node tools/make-schedule.mjs --start=2026-11-20 --days=60
+// 用法：node tools/make-schedule.mjs --start=2026-11-16 --days=49
 //       node tools/make-schedule.mjs --start=            （清空排期，只构建首页）
 import fs from 'node:fs';
 import path from 'node:path';

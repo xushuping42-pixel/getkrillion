@@ -122,13 +122,21 @@ ${o.noindex ? '<meta name="robots" content="noindex,follow">' : '<meta name="rob
 <meta property="og:description" content="${esc(o.desc)}">
 <meta property="og:url" content="${SITE}${o.path}">
 <meta property="og:site_name" content="krillion unlimited">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0f1115">
+<meta property="og:image" content="https://getkrillion.xyz/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="krillion unlimited — seven prompts a day, up to 700 points">
+<meta name="twitter:image" content="https://getkrillion.xyz/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 ${banner}
-<header><a class="logo" href="/"><h1>${esc(o.h1)}</h1></a>${nav}</header>
-<main>
+<header class="site"><a class="logo" href="/"><h1>${esc(o.h1)}</h1></a>${nav}</header>
+<main class="wrap">
 ${o.body}
 </main>
 <footer>
@@ -143,6 +151,7 @@ ${o.body}
 // ---------- 4. 首页（永远生成） ----------
 const homeBody = `<div id="game"><p class="loading">Loading…</p></div>
 
+<div class="seo">
 <h2>What is krillion unlimited?</h2>
 <p>krillion unlimited is a free daily guessing game. You get seven prompts, and for each one you name as many valid answers as you can before you run out of tries. Popular answers score more: the most common answer is worth 100 points, so a perfect round is ${MAX_SCORE} points. No download, no sign-up — the game starts the moment the page opens.</p>
 
@@ -156,7 +165,8 @@ const homeBody = `<div id="game"><p class="loading">Loading…</p></div>
 <p>Every round draws from the same seven categories: Animals, Geography, Food, Movies &amp; TV, Music, Sports and Trivia. The mix is shuffled each round, so no two games feel the same.</p>
 
 <h2>Looking for the answers?</h2>
-<p>If you are stuck or you want to check a round afterwards, see <a href="/answers/">today's Krillion answers</a>. The same page collects <a href="/answers/">Krillion hints</a> for prompts that are harder than they look.</p>`;
+<p>If you are stuck or you want to check a round afterwards, see <a href="/answers/">today's Krillion answers</a>. The same page collects <a href="/answers/">Krillion hints</a> for prompts that are harder than they look.</p>
+</div>`;
 
 write('index.html', shell({
   title: 'krillion unlimited — Free Daily Guessing Game',
@@ -173,7 +183,19 @@ const urls = [{ loc: '/', lastmod: new Date().toISOString().slice(0, 10) }];
 if (SCHED) {
   const byId = new Map(P.map((p) => [p.id, p]));
   const days = Object.keys(SCHED.days).sort();
-  const recent = days.slice().reverse().slice(0, RECENT);
+  const todayParts = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
+    timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit'
+  }).formatToParts(new Date()).map(part => [part.type, part.value]));
+  const today = `${todayParts.year}-${todayParts.month}-${todayParts.day}`;
+  const recent = days.filter(d => d >= SCHED.start && d <= today).reverse().slice(0, RECENT);
+  const recentNote = recent.length
+    ? `Showing the latest scheduled rounds on or before ${today} (Eastern Time), newest first.`
+    : `No rounds have gone live on or before ${today} (Eastern Time). The first scheduled round starts on ${SCHED.start}.`;
+  const todayNote = recent.includes(today)
+    ? "Today's scheduled round is the first entry above."
+    : recent.length
+      ? 'There is no scheduled round for today. The first entry above is the latest earlier round.'
+      : 'There is no published daily round to list yet.';
 
   // 5a. 归档页 /answers/
   const recentList = recent.map((d) => `<li><a href="/answers/${d}/">${d}</a> — ${esc(byId.get(SCHED.days[d][0]).c)} round</li>`).join('\n');
@@ -183,9 +205,10 @@ if (SCHED) {
 <ul class="days">
 ${recentList}
 </ul>
+<p>${esc(recentNote)}</p>
 
 <h2>krillion answers today</h2>
-<p>Today's round is the first entry above. Each daily page lists all seven prompts and the accepted answers in ranking order, so you can see which answers were worth the most points.</p>
+<p>${esc(todayNote)} Each daily page lists all seven prompts and the accepted answers in ranking order, so you can see which answers were worth the most points.</p>
 
 <h2>How scoring works</h2>
 <p>Every accepted answer has a popularity rank. Rank 1 is the most common answer and is worth 100 points; each rank below it is worth a little less, with a floor of 5 points. A prompt is capped at 100 points and a full round at ${MAX_SCORE}.</p>

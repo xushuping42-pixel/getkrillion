@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "start": "2026-11-20",
+  "start": "2026-11-16",
   "perRound": 7,
   "seed": 20261116,
   "days": {
-    "2026-11-20": [
+    "2026-11-16": [
       "band-name",
       "type-of-fruit",
       "us-state-that-borders-canada",
@@ -13,7 +13,7 @@
       "sport-played-with-a-ball",
       "food-thats-spicy"
     ],
-    "2026-11-21": [
+    "2026-11-17": [
       "netflix-show",
       "thing-thats-brown",
       "famous-bridge",
@@ -22,7 +22,7 @@
       "famous-band",
       "thing-thats-sour"
     ],
-    "2026-11-22": [
+    "2026-11-18": [
       "instrument-with-strings",
       "fruit-name",
       "superstition",
@@ -31,7 +31,7 @@
       "type-of-race",
       "team-nfl"
     ],
-    "2026-11-23": [
+    "2026-11-19": [
       "thing-in-a-classroom",
       "type-of-song",
       "job-in-a-hospital",
@@ -40,7 +40,7 @@
       "thing-at-the-gym",
       "ocean-name"
     ],
-    "2026-11-24": [
+    "2026-11-20": [
       "disney-princess",
       "country-in-north-america",
       "thing-a-cat-likes",
@@ -49,7 +49,7 @@
       "type-of-boat",
       "rainy-day-activity"
     ],
-    "2026-11-25": [
+    "2026-11-21": [
       "pizza-topping",
       "nfl-team",
       "invention",
@@ -58,7 +58,7 @@
       "thing-in-a-supermarket",
       "cereal-brand"
     ],
-    "2026-11-26": [
+    "2026-11-22": [
       "emoji",
       "animal-that-flies",
       "thing-in-a-museum",
@@ -67,7 +67,7 @@
       "thing-in-a-kitchen",
       "number-1-10"
     ],
-    "2026-11-27": [
+    "2026-11-23": [
       "board-game",
       "pet",
       "christmas-song",
@@ -76,7 +76,7 @@
       "thing-at-the-beach",
       "month-name"
     ],
-    "2026-11-28": [
+    "2026-11-24": [
       "job-that-works-outdoors",
       "tv-show-2010s",
       "thing-at-a-museum",
@@ -85,7 +85,7 @@
       "social-media-app",
       "red-fruit"
     ],
-    "2026-11-29": [
+    "2026-11-25": [
       "us-state-starting-with-n",
       "mode-of-transportation",
       "thing-at-a-post-office",
@@ -94,7 +94,7 @@
       "video-game-console",
       "tv-show"
     ],
-    "2026-11-30": [
+    "2026-11-26": [
       "tech-company",
       "mountain-name",
       "tv-sitcom",
@@ -103,7 +103,7 @@
       "thing-that-has-buttons",
       "thing-at-a-picnic"
     ],
-    "2026-12-01": [
+    "2026-11-27": [
       "halloween-costume",
       "album-name",
       "thing-at-an-airport",
@@ -112,7 +112,7 @@
       "thing-on-a-desk",
       "big-cat"
     ],
-    "2026-12-02": [
+    "2026-11-28": [
       "famous-painting",
       "type-of-soup",
       "beatles-song",
@@ -121,7 +121,7 @@
       "percussion-instrument",
       "sports-team-with-animal-name"
     ],
-    "2026-12-03": [
+    "2026-11-29": [
       "us-state-starting-with-m",
       "bird-name",
       "zoo-animal",
@@ -130,7 +130,7 @@
       "european-city",
       "disney-movie"
     ],
-    "2026-12-04": [
+    "2026-11-30": [
       "cat-breed",
       "thing-in-a-tree",
       "thing-on-a-burger",
@@ -139,7 +139,7 @@
       "tropical-fruit",
       "clothing-brand"
     ],
-    "2026-12-05": [
+    "2026-12-01": [
       "thing-thats-orange",
       "thing-at-a-farm",
       "sitcom",
@@ -148,7 +148,7 @@
       "river-name",
       "us-president"
     ],
-    "2026-12-06": [
+    "2026-12-02": [
       "thing-at-a-gas-station",
       "phone-app",
       "cuisine-type",
@@ -157,7 +157,7 @@
       "hotel-chain",
       "landmark-name"
     ],
-    "2026-12-07": [
+    "2026-12-03": [
       "stadium-name",
       "sport-name",
       "thing-in-a-fridge",
@@ -166,7 +166,7 @@
       "currency-name",
       "cartoon-character"
     ],
-    "2026-12-08": [
+    "2026-12-04": [
       "type-of-candy",
       "thing-thats-purple",
       "cheese-type",
@@ -175,7 +175,7 @@
       "weather-type",
       "type-of-music"
     ],
-    "2026-12-09": [
+    "2026-12-05": [
       "thing-in-a-purse",
       "dinosaur-name",
       "emotion-name",
@@ -184,7 +184,7 @@
       "dessert-name",
       "planet-name"
     ],
-    "2026-12-10": [
+    "2026-12-06": [
       "escape-room",
       "spice-or-herb",
       "thing-in-a-sandwich",
@@ -193,7 +193,7 @@
       "sea-animal",
       "football-team"
     ],
-    "2026-12-11": [
+    "2026-12-07": [
       "pet-animal",
       "car-brand",
       "movie-genre",
@@ -202,7 +202,7 @@
       "thing-thats-cold",
       "animal-that-hops"
     ],
-    "2026-12-12": [
+    "2026-12-08": [
       "type-of-bread",
       "gym-exercise",
       "thing-thats-blue",
@@ -211,7 +211,7 @@
       "ice-cream-flavor",
       "pop-star"
     ],
-    "2026-12-13": [
+    "2026-12-09": [
       "island-name",
       "animal-that-swims",
       "movie-2000s",
@@ -220,7 +220,7 @@
       "country-in-europe",
       "farm-animal"
     ],
-    "2026-12-14": [
+    "2026-12-10": [
       "olympic-sport",
       "sport-with-a-net",
       "type-of-dance",
@@ -229,7 +229,7 @@
       "type-of-sandwich",
       "thing-in-a-bathroom"
     ],
-    "2026-12-15": [
+    "2026-12-11": [
       "comedy-movie",
       "animal-with-stripes",
       "thing-thats-hot",
@@ -238,7 +238,7 @@
       "thing-you-do-at-the-gym",
       "arctic-animal"
     ],
-    "2026-12-16": [
+    "2026-12-12": [
       "thing-at-a-zoo",
       "thing-thats-white",
       "karaoke-song",
@@ -247,7 +247,7 @@
       "song-that-makes-you-dance",
       "thing-in-fridge"
     ],
-    "2026-12-17": [
+    "2026-12-13": [
       "hobby-name",
       "disney-song",
       "thing-at-a-library",
@@ -256,7 +256,7 @@
       "thing-in-a-pocket",
       "tree-name"
     ],
-    "2026-12-18": [
+    "2026-12-14": [
       "thing-thats-soft",
       "thing-thats-black",
       "type-of-tv-show",
@@ -265,7 +265,7 @@
       "job-that-wears-a-uniform",
       "type-of-tree"
     ],
-    "2026-12-19": [
+    "2026-12-15": [
       "pokemon-name",
       "food-eaten-by-hand",
       "job-at-a-school",
@@ -274,7 +274,7 @@
       "school-supply",
       "movie-villain"
     ],
-    "2026-12-20": [
+    "2026-12-16": [
       "dog-breed",
       "bread-type",
       "music-genre",
@@ -283,7 +283,7 @@
       "ocean-or-sea",
       "game-show"
     ],
-    "2026-12-21": [
+    "2026-12-17": [
       "baseball-team",
       "animal-in-the-jungle",
       "phone-brand",
@@ -292,7 +292,7 @@
       "movie-90s",
       "chain-restaurant"
     ],
-    "2026-12-22": [
+    "2026-12-18": [
       "rapper",
       "vegetable-name",
       "musical-instrument",
@@ -301,7 +301,7 @@
       "type-of-dog-breed",
       "language-name"
     ],
-    "2026-12-23": [
+    "2026-12-19": [
       "animal-with-a-shell",
       "dance-type",
       "tool-at-a-kitchen",
@@ -310,7 +310,7 @@
       "baby-animal",
       "instrument-in-a-rock-band"
     ],
-    "2026-12-24": [
+    "2026-12-20": [
       "famous-athlete",
       "animal-that-can-fly",
       "ocean-animal",
@@ -319,7 +319,7 @@
       "snack-name",
       "body-part"
     ],
-    "2026-12-25": [
+    "2026-12-21": [
       "superhero-power",
       "birthday-party-activity",
       "thing-in-a-garage",
@@ -328,7 +328,7 @@
       "star-wars-character",
       "vacation-packing"
     ],
-    "2026-12-26": [
+    "2026-12-22": [
       "famous-river",
       "type-of-cheese",
       "thing-at-a-wedding",
@@ -337,7 +337,7 @@
       "animal-with-a-tail",
       "animal-that-lays-eggs"
     ],
-    "2026-12-27": [
+    "2026-12-23": [
       "animal-that-lives-in-the-desert",
       "olympic-host-city",
       "cocktail-name",
@@ -346,7 +346,7 @@
       "movie-franchise",
       "reality-tv-show"
     ],
-    "2026-12-28": [
+    "2026-12-24": [
       "type-of-jewelry",
       "type-of-salad",
       "country-in-south-america",
@@ -355,7 +355,7 @@
       "type-of-shoe",
       "desert-name"
     ],
-    "2026-12-29": [
+    "2026-12-25": [
       "vehicle-type",
       "household-chore",
       "national-park",
@@ -364,7 +364,7 @@
       "sandwich-type",
       "breakfast-cereal"
     ],
-    "2026-12-30": [
+    "2026-12-26": [
       "thing-in-a-hotel-room",
       "toy-name",
       "desert",
@@ -373,7 +373,7 @@
       "fast-food-chain",
       "baseball-position"
     ],
-    "2026-12-31": [
+    "2026-12-27": [
       "country-south-america",
       "extreme-sport",
       "thing-at-the-airport",
@@ -382,7 +382,7 @@
       "gemstone-name",
       "movie-from-the-90s"
     ],
-    "2027-01-01": [
+    "2026-12-28": [
       "thing-in-space",
       "country-europe",
       "thing-thats-sweet",
@@ -391,7 +391,7 @@
       "natural-disaster",
       "island"
     ],
-    "2027-01-02": [
+    "2026-12-29": [
       "horror-movie",
       "job-in-a-school",
       "shoe-brand",
@@ -400,7 +400,7 @@
       "video-game",
       "winter-sport"
     ],
-    "2027-01-03": [
+    "2026-12-30": [
       "continent-name",
       "fish-name",
       "at-the-beach",
@@ -409,7 +409,7 @@
       "type-of-pie",
       "animal-that-lives-in-a-cave"
     ],
-    "2027-01-04": [
+    "2026-12-31": [
       "coffee-drink",
       "thing-in-a-bedroom",
       "streaming-service",
@@ -418,7 +418,7 @@
       "thing-in-a-junk-drawer",
       "thing-you-do-at-a-baseball-game"
     ],
-    "2027-01-05": [
+    "2027-01-01": [
       "dessert",
       "reptile-name",
       "thing-in-a-first-aid-kit",
@@ -427,7 +427,7 @@
       "thing-in-a-school-bag",
       "thing-in-your-bag"
     ],
-    "2027-01-06": [
+    "2027-01-02": [
       "country-in-asia",
       "anime",
       "country-in-africa",
@@ -436,7 +436,7 @@
       "airline",
       "actor-born-60s"
     ],
-    "2027-01-07": [
+    "2027-01-03": [
       "color-name",
       "type-of-cookie",
       "bird-that-cant-fly",
