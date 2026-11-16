@@ -3,9 +3,11 @@
 // 规则：schedule.start 为空时只生成首页和外壳，不生成任何答案页与归档
 import fs from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 
 const ROOT = process.cwd();
 const DATA = path.join(ROOT, 'data');
+const STYLE_VERSION = createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'css/style.css'))).digest('hex').slice(0, 12);
 const TZ = 'America/New_York';
 const SITE = 'https://getkrillion.xyz';
 const PER_ROUND = 7;
@@ -150,11 +152,11 @@ ${o.noindex ? '<meta name="robots" content="noindex,follow">' : '<meta name="rob
 <meta property="og:image:alt" content="krillion unlimited — seven prompts a day, up to 700 points">
 <meta name="twitter:image" content="https://getkrillion.xyz/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/style.css?v=${STYLE_VERSION}">
 </head>
 <body>
 ${banner}
-<header class="site"><a class="logo" href="/" aria-label="Krillion Unlimited home"><img src="/favicon.svg" width="36" height="36" alt=""><span>krillion <span class="wordmark-tail">unlimited</span></span></a>${nav(o.path)}</header>
+<header class="site"><div class="site-inner"><a class="logo" href="/" aria-label="Krillion Unlimited home"><img src="/favicon.svg" width="36" height="36" alt=""><span>krillion <span class="wordmark-tail">unlimited</span></span></a>${nav(o.path)}</div></header>
 <main class="wrap">
 ${o.path !== "/" ? `<div class="page-heading"><p class="eyebrow">THE DAILY RECAP</p><h1>${esc(o.h1)}</h1></div>` : ""}
 ${o.body}
