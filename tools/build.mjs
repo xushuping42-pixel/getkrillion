@@ -209,7 +209,7 @@ ${recentList}
     body: answersBody,
     noindex: false
   }));
-  urls.push({ loc: '/answers/', lastmod: days[days.length - 1] });
+  urls.push({ loc: '/answers/', lastmod: new Date().toISOString().slice(0, 10) });
 
   // 5b. 一天一页 /answers/YYYY-MM-DD/
   days.forEach((d, i) => {
