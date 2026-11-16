@@ -105,8 +105,26 @@ if (fs.existsSync(answersRoot)) {
   }
 }
 
+function breadcrumbData(pagePath) {
+  if (!pagePath.startsWith('/answers/')) return '';
+  const trail = [
+    { name: 'Home', item: SITE + '/' },
+    { name: 'Answers', item: SITE + '/answers/' }
+  ];
+  const date = pagePath.match(/^\/answers\/(\d{4}-\d{2}-\d{2})\/$/);
+  if (date) trail.push({ name: date[1], item: SITE + pagePath });
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: trail.map((entry, index) => ({
+      '@type': 'ListItem', position: index + 1, name: entry.name, item: entry.item
+    }))
+  };
+  return '<script type="application/ld+json">' + JSON.stringify(data).replace(/</g, '\\u003c') + '</script>';
+}
+
 // ---------- 3. 页面骨架 ----------
-const nav = '<nav><a href="/">Play</a> <span>·</span> <a href="/answers/">Answers</a></nav>';
+const nav = (current) => '<nav aria-label="Main navigation"><a href="/"' + (current === '/' ? ' aria-current="page"' : '') + '>Play</a><a href="/answers/"' + (current.startsWith('/answers/') ? ' aria-current="page"' : '') + '>Answers</a></nav>';
 const banner = isDemo ? '<div class="demo-banner">Demo build — question bank not final</div>' : '';
 const shell = (o) => `<!doctype html>
 <html lang="en">
@@ -116,6 +134,7 @@ const shell = (o) => `<!doctype html>
 <title>${esc(o.title)}</title>
 <meta name="description" content="${esc(o.desc)}">
 <link rel="canonical" href="${SITE}${o.path}">
+${breadcrumbData(o.path)}
 ${o.noindex ? '<meta name="robots" content="noindex,follow">' : '<meta name="robots" content="index,follow,max-image-preview:large">'}
 <meta property="og:type" content="website">
 <meta property="og:title" content="${esc(o.title)}">
@@ -135,8 +154,9 @@ ${o.noindex ? '<meta name="robots" content="noindex,follow">' : '<meta name="rob
 </head>
 <body>
 ${banner}
-<header class="site"><a class="logo" href="/"><h1>${esc(o.h1)}</h1></a>${nav}</header>
+<header class="site"><a class="logo" href="/" aria-label="Krillion Unlimited home"><img src="/favicon.svg" width="36" height="36" alt=""><span>krillion <span class="wordmark-tail">unlimited</span></span></a>${nav(o.path)}</header>
 <main class="wrap">
+${o.path !== "/" ? `<div class="page-heading"><p class="eyebrow">THE DAILY RECAP</p><h1>${esc(o.h1)}</h1></div>` : ""}
 ${o.body}
 </main>
 <footer>
@@ -149,11 +169,14 @@ ${o.body}
 `;
 
 // ---------- 4. 首页（永远生成） ----------
-const homeBody = `<div id="game"><p class="loading">Loading…</p></div>
+const homeBody = `<section class="game-intro" aria-labelledby="game-title"><p class="eyebrow"><span class="live-dot"></span> A LITTLE TRIVIA, EVERY DAY</p><h1 id="game-title">Seven prompts. One daily challenge.</h1><p>A little knowledge. A few good guesses. Make yours count.</p></section>
+<div id="game"><p class="loading">Getting your prompts ready…</p></div>
+<div class="rules-strip" aria-label="Game rules"><span><b>07</b> prompts</span><span><b>03</b> tries each</span><span><b>24h</b> a fresh challenge</span></div>
 
 <div class="seo">
+<p class="eyebrow">A SMALL BREAK. A GOOD CHALLENGE.</p>
 <h2>What is krillion unlimited?</h2>
-<p>krillion unlimited is a free daily guessing game. You get seven prompts, and for each one you name as many valid answers as you can before you run out of tries. Popular answers score more: the most common answer is worth 100 points, so a perfect round is ${MAX_SCORE} points. No download, no sign-up — the game starts the moment the page opens.</p>
+<p>krillion unlimited is a free daily guessing game. You get seven prompts, and for each one you name as many valid answers as you can before you run out of tries. Your best answer on each prompt counts. Answers score max(5, 100 − rank), so rank 1 earns 99 points. Your seven scores are shown against a ${MAX_SCORE}-point scale. No download, no sign-up — the game starts the moment the page opens.</p>
 
 <h2>How to play</h2>
 <p>Read the prompt, type an answer, and press Enter. You have three tries per prompt. Answers are matched against a ranked list, so the more common your answer, the higher it scores. When all seven prompts are done, the round ends and you can copy your score card and share it.</p>
@@ -166,6 +189,7 @@ const homeBody = `<div id="game"><p class="loading">Loading…</p></div>
 
 <h2>Looking for the answers?</h2>
 <p>If you are stuck or you want to check a round afterwards, see <a href="/answers/">today's Krillion answers</a>. The same page collects <a href="/answers/">Krillion hints</a> for prompts that are harder than they look.</p>
+<p>Latest round: <a href="/answers/2026-11-16/">krillion answers for today</a> · <a href="/answers/2026-11-17/">tomorrow's round</a> · <a href="/answers/">all recent answers</a></p>
 </div>`;
 
 write('index.html', shell({
@@ -198,7 +222,9 @@ if (SCHED) {
       : 'There is no published daily round to list yet.';
 
   // 5a. 归档页 /answers/
-  const recentList = recent.map((d) => `<li><a href="/answers/${d}/">${d}</a> — ${esc(byId.get(SCHED.days[d][0]).c)} round</li>`).join('\n');
+  const roundLink = (d) => `<li><a href="/answers/${d}/">${d}</a> — ${esc(byId.get(SCHED.days[d][0]).c)} round</li>`;
+  const recentList = recent.map(roundLink).join('\n');
+  const allScheduledList = days.map(roundLink).join('\n');
   const answersBody = `<p>Every round of krillion unlimited is built from seven prompts. This page lists the most recent rounds with the full answer list for each one, so you can check a prompt you missed or look ahead before you play.</p>
 
 <h2>Recent rounds</h2>
@@ -206,6 +232,11 @@ if (SCHED) {
 ${recentList}
 </ul>
 <p>${esc(recentNote)}</p>
+
+<h2>All scheduled rounds</h2>
+<ul class="days">
+${allScheduledList}
+</ul>
 
 <h2>krillion answers today</h2>
 <p>${esc(todayNote)} Each daily page lists all seven prompts and the accepted answers in ranking order, so you can see which answers were worth the most points.</p>
@@ -263,6 +294,7 @@ ${blocks}
 <h2>About this round</h2>
 <p>These are the prompts that were live on ${d} and every answer the site accepts for them, ordered by popularity rank. Rank 1 answers are worth the most points. Rounds are archived by date and are never re-generated, so this page stays as it was on the day it ran.</p>
 
+<nav class="breadcrumbs meta" aria-label="Breadcrumb"><a href="/">Home</a> <span aria-hidden="true">›</span> <a href="/answers/">Answers</a> <span aria-hidden="true">›</span> <span aria-current="page">${esc(d)}</span></nav>
 <p class="pager">
 ${prev ? `<a href="/answers/${prev}/">← ${prev}</a>` : '<span></span>'}
 <a href="/answers/">All recent rounds</a>
@@ -277,7 +309,7 @@ ${next ? `<a href="/answers/${next}/">${next} →</a>` : '<span></span>'}
       body: dayBody,
       noindex: false
     }));
-    urls.push({ loc: '/answers/' + d + '/', lastmod: d });
+    urls.push({ loc: '/answers/' + d + '/', lastmod: new Date().toISOString().slice(0, 10) });
   });
 } else {
   // 没有排期也给一个 /answers/ 外壳，避免导航 404
