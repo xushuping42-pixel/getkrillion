@@ -1,0 +1,335 @@
+{
+  "version": 1,
+  "demo": true,
+  "prompts": [
+    {
+      "id": "fb-fruit-yellow",
+      "cat": "Food",
+      "p": "Name a yellow fruit.",
+      "a": [
+        [
+          "Banana",
+          1,
+          [
+            "bananas"
+          ]
+        ],
+        [
+          "Lemon",
+          2,
+          []
+        ],
+        [
+          "Mango",
+          3,
+          []
+        ],
+        [
+          "Pineapple",
+          4,
+          []
+        ],
+        [
+          "Papaya",
+          5,
+          []
+        ],
+        [
+          "Star fruit",
+          6,
+          []
+        ],
+        [
+          "Golden kiwi",
+          7,
+          []
+        ]
+      ]
+    },
+    {
+      "id": "fb-planet",
+      "cat": "Geography",
+      "p": "Name a planet in our solar system.",
+      "a": [
+        [
+          "Mars",
+          1,
+          []
+        ],
+        [
+          "Jupiter",
+          2,
+          []
+        ],
+        [
+          "Saturn",
+          3,
+          []
+        ],
+        [
+          "Venus",
+          4,
+          []
+        ],
+        [
+          "Neptune",
+          5,
+          []
+        ],
+        [
+          "Mercury",
+          6,
+          []
+        ],
+        [
+          "Uranus",
+          7,
+          []
+        ]
+      ]
+    },
+    {
+      "id": "fb-us-state",
+      "cat": "Geography",
+      "p": "Name a US state that starts with the letter C.",
+      "a": [
+        [
+          "California",
+          1,
+          []
+        ],
+        [
+          "Colorado",
+          2,
+          []
+        ],
+        [
+          "Connecticut",
+          3,
+          []
+        ]
+      ]
+    },
+    {
+      "id": "fb-animal-mammal",
+      "cat": "Animals",
+      "p": "Name a mammal that lives in the ocean.",
+      "a": [
+        [
+          "Whale",
+          1,
+          [
+            "blue whale",
+            "humpback whale"
+          ]
+        ],
+        [
+          "Dolphin",
+          2,
+          []
+        ],
+        [
+          "Seal",
+          3,
+          []
+        ],
+        [
+          "Manatee",
+          4,
+          []
+        ],
+        [
+          "Walrus",
+          5,
+          []
+        ],
+        [
+          "Orca",
+          6,
+          [
+            "killer whale"
+          ]
+        ],
+        [
+          "Sea otter",
+          7,
+          [
+            "otter"
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "fb-movie-toy",
+      "cat": "Movies & TV",
+      "p": "Name a movie that has a talking toy.",
+      "a": [
+        [
+          "Toy Story",
+          1,
+          [
+            "toy story 2",
+            "toy story 3",
+            "toy story 4"
+          ]
+        ],
+        [
+          "Child's Play",
+          2,
+          [
+            "chucky",
+            "chuckie"
+          ]
+        ],
+        [
+          "Ted",
+          3,
+          []
+        ],
+        [
+          "Small Soldiers",
+          4,
+          []
+        ]
+      ]
+    },
+    {
+      "id": "fb-music-band",
+      "cat": "Music",
+      "p": "Name a band with four members.",
+      "a": [
+        [
+          "The Beatles",
+          1,
+          [
+            "beatles"
+          ]
+        ],
+        [
+          "Queen",
+          2,
+          []
+        ],
+        [
+          "ABBA",
+          3,
+          []
+        ],
+        [
+          "Led Zeppelin",
+          4,
+          []
+        ],
+        [
+          "The Who",
+          5,
+          []
+        ],
+        [
+          "Kiss",
+          6,
+          []
+        ],
+        [
+          "Weezer",
+          7,
+          []
+        ]
+      ]
+    },
+    {
+      "id": "fb-sport-ball",
+      "cat": "Sports",
+      "p": "Name a sport played with a ball.",
+      "a": [
+        [
+          "Basketball",
+          1,
+          []
+        ],
+        [
+          "Soccer",
+          2,
+          [
+            "football"
+          ]
+        ],
+        [
+          "Tennis",
+          3,
+          []
+        ],
+        [
+          "Baseball",
+          4,
+          []
+        ],
+        [
+          "Volleyball",
+          5,
+          []
+        ],
+        [
+          "Golf",
+          6,
+          []
+        ],
+        [
+          "Cricket",
+          7,
+          []
+        ]
+      ]
+    },
+    {
+      "id": "demo-sandwich",
+      "cat": "Food",
+      "p": "Name a sandwich.",
+      "a": [
+        [
+          "Peanut butter and jelly",
+          1,
+          [
+            "pb&j",
+            "pb and j",
+            "pbj"
+          ]
+        ],
+        [
+          "Grilled cheese",
+          2,
+          []
+        ],
+        [
+          "BLT",
+          3,
+          []
+        ]
+      ]
+    },
+    {
+      "id": "demo-fast-food",
+      "cat": "Food",
+      "p": "Name a fast-food chain.",
+      "a": [
+        [
+          "McDonald’s",
+          1,
+          [
+            "mcdonalds"
+          ]
+        ],
+        [
+          "Chick-fil-A",
+          2,
+          []
+        ],
+        [
+          "In-N-Out",
+          3,
+          []
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "krillion-unlimited",
+  "private": true,
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "test": "node --test",
+    "dev": "node tools/dev.mjs"
+  }
+}

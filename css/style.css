@@ -1,0 +1,124 @@
+:root{
+  --bg:#0f1115;--card:#171a21;--line:#262b36;--fg:#e8ecf3;--dim:#8b93a7;
+  --green:#3aa675;--yellow:#c9a227;--orange:#c47a2c;--grey:#39404f;--accent:#5b8def;--r:10px;
+}
+@media (prefers-color-scheme:light){
+  :root{--bg:#f7f8fa;--card:#fff;--line:#e3e6ec;--fg:#15181f;--dim:#6b7385;--grey:#d7dbe3;}
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);
+  font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:680px;margin:0 auto;padding:14px 16px 64px}
+
+/* 页头 */
+header.site{display:flex;align-items:center;justify-content:space-between;
+  padding:8px 0 12px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.brand{font-weight:700;font-size:15px;letter-spacing:.02em;color:var(--fg)}
+.pill{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--dim);
+  border:1px solid var(--line);border-radius:999px;padding:5px 9px}
+
+/* 标题区 */
+h1{font-size:26px;line-height:1.25;margin:0 0 6px;letter-spacing:-.01em}
+.lede{color:var(--dim);font-size:14px;margin:0 0 18px}
+h2{font-size:17px;margin:26px 0 8px}
+h3{font-size:15px;margin:18px 0 6px}
+
+/* 卡片与游戏区 */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:16px;margin:0 0 16px}
+.dots{display:flex;gap:6px;margin-bottom:14px}
+.dot{width:100%;height:4px;border-radius:2px;background:var(--grey)}
+.dot.now{background:var(--accent)}
+.dot.ok{background:var(--green)}
+
+.cat{display:inline-block;font:600 11px/1 inherit;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:5px 9px;margin-bottom:10px}
+.prompt{font-size:20px;font-weight:650;line-height:1.35;margin:0 0 4px}
+.hintline{color:var(--dim);font-size:13px;margin:0 0 14px}
+.round-label{color:var(--dim);font-size:13px;margin:0 0 12px}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* 输入区 */
+.row{display:flex;gap:8px}
+.demo-banner{background:#f1cb58;color:#33270a;padding:10px 14px;border-radius:8px;margin:10px 0 18px;font-weight:600;font-size:14px}
+.head{justify-content:space-between;margin-bottom:18px}
+.go{margin-top:10px;background:var(--accent);color:#fff}
+.ghost{margin-left:8px}
+.tries{color:var(--dim);font-size:13px}
+.tries-list{padding-left:20px;font-size:14px}
+.tries-list .hit{color:var(--green)}
+.tries-list .miss{color:#e06b6b}
+.final{font-size:40px;font-weight:700;margin:12px 0}
+input[type=text]{flex:1;min-width:0;font-size:16px;padding:12px 13px;border-radius:8px;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg);outline:none;
+  scroll-margin-bottom:120px}
+input[type=text]:focus{border-color:var(--accent)}
+input[type=text]::placeholder{color:var(--dim)}
+button{font:600 15px/1 inherit;padding:13px 16px;border-radius:8px;border:1px solid var(--line);
+  background:var(--card);color:var(--fg);cursor:pointer;-webkit-tap-highlight-color:transparent}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button:disabled{opacity:.45;cursor:default}
+button.wide{width:100%;margin-top:10px}
+
+/* 已答出列表 */
+.found{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.found li{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px 11px;
+  font-size:14px;animation:pop .16s ease-out}
+.found .pts{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--dim);flex:none}
+@keyframes pop{from{transform:translateY(-3px);opacity:0}to{transform:none;opacity:1}}
+
+.msg{font-size:13px;min-height:18px;margin:8px 0 0;color:var(--dim)}
+.msg.bad{color:#e06b6b}
+.msg.good{color:var(--green)}
+
+/* 结算 */
+.score{font:700 44px/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:-.02em;margin:4px 0 2px}
+.score small{font-size:20px;color:var(--dim);font-weight:600}
+.grid{display:flex;gap:5px;margin:14px 0}
+.grid i{flex:1;height:34px;border-radius:6px;background:var(--grey);
+  display:flex;align-items:center;justify-content:center;
+  font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--dim);font-style:normal}
+.grid i.g{background:var(--green);color:#fff}
+.grid i.y{background:var(--yellow);color:#231d05}
+.grid i.o{background:var(--orange);color:#fff}
+.best{font-size:13px;color:var(--dim);margin:0 0 14px}
+.newbest{color:var(--green);font-weight:700}
+pre.share{white-space:pre-wrap;word-break:break-word;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;
+  background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px;margin:12px 0}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btns button.wide{grid-column:1/-1}
+
+/* 答案页 */
+table{width:100%;border-collapse:collapse;font-size:14px;margin:6px 0 4px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
+th{font:600 11px/1 inherit;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+td:first-child,td:last-child{width:44px;color:var(--dim);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+td:first-child{text-align:center}
+td:last-child{text-align:right}
+.archive{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.archive a{display:inline-block;font-size:12px;border:1px solid var(--line);border-radius:6px;
+  padding:5px 8px;color:var(--dim)}
+.archive a:hover{color:var(--fg);border-color:var(--accent)}
+
+/* 倒计时 */
+.countdown{font:600 13px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--dim);margin:0 0 12px}
+.countdown b{color:var(--fg)}
+
+/* 正文承接区 */
+.seo{border-top:1px solid var(--line);margin-top:28px;padding-top:6px;font-size:14px;color:var(--dim)}
+.seo p{margin:0 0 10px}
+.seo strong{color:var(--fg)}
+
+/* toast */
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;
+  background:var(--fg);color:var(--bg);font:600 13px/1 inherit;padding:11px 15px;border-radius:8px;
+  pointer-events:none;transition:.2s;z-index:99}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:420px){h1{font-size:23px}.prompt{font-size:18px}.score{font-size:38px}}

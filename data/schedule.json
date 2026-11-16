@@ -1,0 +1,548 @@
+{
+  "version": 1,
+  "start": "2026-11-20",
+  "perRound": 7,
+  "seed": 20261116,
+  "days": {
+    "2026-11-20": [
+      "band-name",
+      "type-of-fruit",
+      "us-state-that-borders-canada",
+      "game-you-play-outside",
+      "thing-in-a-wallet",
+      "sport-played-with-a-ball",
+      "food-thats-spicy"
+    ],
+    "2026-11-21": [
+      "netflix-show",
+      "thing-thats-brown",
+      "famous-bridge",
+      "ice-cream-topping",
+      "thing-in-a-hospital",
+      "famous-band",
+      "thing-thats-sour"
+    ],
+    "2026-11-22": [
+      "instrument-with-strings",
+      "fruit-name",
+      "superstition",
+      "superhero-name",
+      "thing-you-see-at-the-beach",
+      "type-of-race",
+      "team-nfl"
+    ],
+    "2026-11-23": [
+      "thing-in-a-classroom",
+      "type-of-song",
+      "job-in-a-hospital",
+      "soda-brand",
+      "superhero-movie",
+      "thing-at-the-gym",
+      "ocean-name"
+    ],
+    "2026-11-24": [
+      "disney-princess",
+      "country-in-north-america",
+      "thing-a-cat-likes",
+      "job-in-a-restaurant",
+      "country-africa",
+      "type-of-boat",
+      "rainy-day-activity"
+    ],
+    "2026-11-25": [
+      "pizza-topping",
+      "nfl-team",
+      "invention",
+      "thing-thats-round",
+      "holiday-name",
+      "thing-in-a-supermarket",
+      "cereal-brand"
+    ],
+    "2026-11-26": [
+      "emoji",
+      "animal-that-flies",
+      "thing-in-a-museum",
+      "type-of-flower",
+      "kids-tv-show",
+      "thing-in-a-kitchen",
+      "number-1-10"
+    ],
+    "2026-11-27": [
+      "board-game",
+      "pet",
+      "christmas-song",
+      "sports-team-city",
+      "meat-type",
+      "thing-at-the-beach",
+      "month-name"
+    ],
+    "2026-11-28": [
+      "job-that-works-outdoors",
+      "tv-show-2010s",
+      "thing-at-a-museum",
+      "famous-singer",
+      "famous-actor",
+      "social-media-app",
+      "red-fruit"
+    ],
+    "2026-11-29": [
+      "us-state-starting-with-n",
+      "mode-of-transportation",
+      "thing-at-a-post-office",
+      "thing-in-your-pocket",
+      "thing-in-a-pencil-case",
+      "video-game-console",
+      "tv-show"
+    ],
+    "2026-11-30": [
+      "tech-company",
+      "mountain-name",
+      "tv-sitcom",
+      "nba-team",
+      "pasta-type",
+      "thing-that-has-buttons",
+      "thing-at-a-picnic"
+    ],
+    "2026-12-01": [
+      "halloween-costume",
+      "album-name",
+      "thing-at-an-airport",
+      "thing-thats-green",
+      "type-of-ball",
+      "thing-on-a-desk",
+      "big-cat"
+    ],
+    "2026-12-02": [
+      "famous-painting",
+      "type-of-soup",
+      "beatles-song",
+      "mammal",
+      "soft-drink",
+      "percussion-instrument",
+      "sports-team-with-animal-name"
+    ],
+    "2026-12-03": [
+      "us-state-starting-with-m",
+      "bird-name",
+      "zoo-animal",
+      "thing-in-a-lunchbox",
+      "instrument-name",
+      "european-city",
+      "disney-movie"
+    ],
+    "2026-12-04": [
+      "cat-breed",
+      "thing-in-a-tree",
+      "thing-on-a-burger",
+      "pop-song-2000s",
+      "singer-name",
+      "tropical-fruit",
+      "clothing-brand"
+    ],
+    "2026-12-05": [
+      "thing-thats-orange",
+      "thing-at-a-farm",
+      "sitcom",
+      "type-of-vegetable",
+      "famous-landmark",
+      "river-name",
+      "us-president"
+    ],
+    "2026-12-06": [
+      "thing-at-a-gas-station",
+      "phone-app",
+      "cuisine-type",
+      "music-festival",
+      "us-state-capital",
+      "hotel-chain",
+      "landmark-name"
+    ],
+    "2026-12-07": [
+      "stadium-name",
+      "sport-name",
+      "thing-in-a-fridge",
+      "thing-in-pocket",
+      "thing-in-a-car",
+      "currency-name",
+      "cartoon-character"
+    ],
+    "2026-12-08": [
+      "type-of-candy",
+      "thing-thats-purple",
+      "cheese-type",
+      "thing-thats-loud",
+      "type-of-hat",
+      "weather-type",
+      "type-of-music"
+    ],
+    "2026-12-09": [
+      "thing-in-a-purse",
+      "dinosaur-name",
+      "emotion-name",
+      "bird-type",
+      "martial-art",
+      "dessert-name",
+      "planet-name"
+    ],
+    "2026-12-10": [
+      "escape-room",
+      "spice-or-herb",
+      "thing-in-a-sandwich",
+      "thing-thats-red",
+      "type-of-pasta",
+      "sea-animal",
+      "football-team"
+    ],
+    "2026-12-11": [
+      "pet-animal",
+      "car-brand",
+      "movie-genre",
+      "capital-city",
+      "thing-in-a-backpack",
+      "thing-thats-cold",
+      "animal-that-hops"
+    ],
+    "2026-12-12": [
+      "type-of-bread",
+      "gym-exercise",
+      "thing-thats-blue",
+      "mlb-team",
+      "harry-potter-character",
+      "ice-cream-flavor",
+      "pop-star"
+    ],
+    "2026-12-13": [
+      "island-name",
+      "animal-that-swims",
+      "movie-2000s",
+      "flower-name",
+      "thing-with-wheels",
+      "country-in-europe",
+      "farm-animal"
+    ],
+    "2026-12-14": [
+      "olympic-sport",
+      "sport-with-a-net",
+      "type-of-dance",
+      "us-state",
+      "thing-in-a-soup",
+      "type-of-sandwich",
+      "thing-in-a-bathroom"
+    ],
+    "2026-12-15": [
+      "comedy-movie",
+      "animal-with-stripes",
+      "thing-thats-hot",
+      "fruit-thats-red",
+      "fast-food-restaurant",
+      "thing-you-do-at-the-gym",
+      "arctic-animal"
+    ],
+    "2026-12-16": [
+      "thing-at-a-zoo",
+      "thing-thats-white",
+      "karaoke-song",
+      "country-letter-a",
+      "christmas-movie",
+      "song-that-makes-you-dance",
+      "thing-in-fridge"
+    ],
+    "2026-12-17": [
+      "hobby-name",
+      "disney-song",
+      "thing-at-a-library",
+      "clothing-item",
+      "insect-name",
+      "thing-in-a-pocket",
+      "tree-name"
+    ],
+    "2026-12-18": [
+      "thing-thats-soft",
+      "thing-thats-black",
+      "type-of-tv-show",
+      "thing-at-a-fire-station",
+      "thing-at-a-playground",
+      "job-that-wears-a-uniform",
+      "type-of-tree"
+    ],
+    "2026-12-19": [
+      "pokemon-name",
+      "food-eaten-by-hand",
+      "job-at-a-school",
+      "candy-brand",
+      "programming-language",
+      "school-supply",
+      "movie-villain"
+    ],
+    "2026-12-20": [
+      "dog-breed",
+      "bread-type",
+      "music-genre",
+      "smartphone-brand",
+      "thing-you-do-in-the-morning",
+      "ocean-or-sea",
+      "game-show"
+    ],
+    "2026-12-21": [
+      "baseball-team",
+      "animal-in-the-jungle",
+      "phone-brand",
+      "thing-at-a-birthday-party",
+      "day-of-week",
+      "movie-90s",
+      "chain-restaurant"
+    ],
+    "2026-12-22": [
+      "rapper",
+      "vegetable-name",
+      "musical-instrument",
+      "tool-in-a-toolbox",
+      "soccer-club",
+      "type-of-dog-breed",
+      "language-name"
+    ],
+    "2026-12-23": [
+      "animal-with-a-shell",
+      "dance-type",
+      "tool-at-a-kitchen",
+      "type-of-scientist",
+      "athlete",
+      "baby-animal",
+      "instrument-in-a-rock-band"
+    ],
+    "2026-12-24": [
+      "famous-athlete",
+      "animal-that-can-fly",
+      "ocean-animal",
+      "spice-name",
+      "bird",
+      "snack-name",
+      "body-part"
+    ],
+    "2026-12-25": [
+      "superhero-power",
+      "birthday-party-activity",
+      "thing-in-a-garage",
+      "type-of-exercise",
+      "animal-in-australia",
+      "star-wars-character",
+      "vacation-packing"
+    ],
+    "2026-12-26": [
+      "famous-river",
+      "type-of-cheese",
+      "thing-at-a-wedding",
+      "desert-animal",
+      "thing-thats-yellow",
+      "animal-with-a-tail",
+      "animal-that-lays-eggs"
+    ],
+    "2026-12-27": [
+      "animal-that-lives-in-the-desert",
+      "olympic-host-city",
+      "cocktail-name",
+      "continent",
+      "sport-with-no-ball",
+      "movie-franchise",
+      "reality-tv-show"
+    ],
+    "2026-12-28": [
+      "type-of-jewelry",
+      "type-of-salad",
+      "country-in-south-america",
+      "type-of-tea",
+      "card-game",
+      "type-of-shoe",
+      "desert-name"
+    ],
+    "2026-12-29": [
+      "vehicle-type",
+      "household-chore",
+      "national-park",
+      "school-subject",
+      "job-that-helps-people",
+      "sandwich-type",
+      "breakfast-cereal"
+    ],
+    "2026-12-30": [
+      "thing-in-a-hotel-room",
+      "toy-name",
+      "desert",
+      "word-after-krill",
+      "thing-that-smells-good",
+      "fast-food-chain",
+      "baseball-position"
+    ],
+    "2026-12-31": [
+      "country-south-america",
+      "extreme-sport",
+      "thing-at-the-airport",
+      "shape-name",
+      "sports-equipment",
+      "gemstone-name",
+      "movie-from-the-90s"
+    ],
+    "2027-01-01": [
+      "thing-in-space",
+      "country-europe",
+      "thing-thats-sweet",
+      "animated-movie",
+      "sci-fi-movie",
+      "natural-disaster",
+      "island"
+    ],
+    "2027-01-02": [
+      "horror-movie",
+      "job-in-a-school",
+      "shoe-brand",
+      "breakfast-food",
+      "superhero",
+      "video-game",
+      "winter-sport"
+    ],
+    "2027-01-03": [
+      "continent-name",
+      "fish-name",
+      "at-the-beach",
+      "tennis-player",
+      "taylor-swift-song",
+      "type-of-pie",
+      "animal-that-lives-in-a-cave"
+    ],
+    "2027-01-04": [
+      "coffee-drink",
+      "thing-in-a-bedroom",
+      "streaming-service",
+      "thing-at-a-carnival",
+      "country-starting-with-a",
+      "thing-in-a-junk-drawer",
+      "thing-you-do-at-a-baseball-game"
+    ],
+    "2027-01-05": [
+      "dessert",
+      "reptile-name",
+      "thing-in-a-first-aid-kit",
+      "video-game-character",
+      "us-city",
+      "thing-in-a-school-bag",
+      "thing-in-your-bag"
+    ],
+    "2027-01-06": [
+      "country-in-asia",
+      "anime",
+      "country-in-africa",
+      "snack-at-a-movie-theater",
+      "instrument-you-blow-into",
+      "airline",
+      "actor-born-60s"
+    ],
+    "2027-01-07": [
+      "color-name",
+      "type-of-cookie",
+      "bird-that-cant-fly",
+      "bank-name",
+      "tool-name",
+      "thing-at-a-concert",
+      "type-of-nut"
+    ],
+    "2027-01-08": [
+      "band-name",
+      "type-of-fruit",
+      "us-state-that-borders-canada",
+      "game-you-play-outside",
+      "thing-in-a-wallet",
+      "sport-played-with-a-ball",
+      "food-thats-spicy"
+    ],
+    "2027-01-09": [
+      "netflix-show",
+      "thing-thats-brown",
+      "famous-bridge",
+      "ice-cream-topping",
+      "thing-in-a-hospital",
+      "famous-band",
+      "thing-thats-sour"
+    ],
+    "2027-01-10": [
+      "instrument-with-strings",
+      "fruit-name",
+      "superstition",
+      "superhero-name",
+      "thing-you-see-at-the-beach",
+      "type-of-race",
+      "team-nfl"
+    ],
+    "2027-01-11": [
+      "thing-in-a-classroom",
+      "type-of-song",
+      "job-in-a-hospital",
+      "soda-brand",
+      "superhero-movie",
+      "thing-at-the-gym",
+      "ocean-name"
+    ],
+    "2027-01-12": [
+      "disney-princess",
+      "country-in-north-america",
+      "thing-a-cat-likes",
+      "job-in-a-restaurant",
+      "country-africa",
+      "type-of-boat",
+      "rainy-day-activity"
+    ],
+    "2027-01-13": [
+      "pizza-topping",
+      "nfl-team",
+      "invention",
+      "thing-thats-round",
+      "holiday-name",
+      "thing-in-a-supermarket",
+      "cereal-brand"
+    ],
+    "2027-01-14": [
+      "emoji",
+      "animal-that-flies",
+      "thing-in-a-museum",
+      "type-of-flower",
+      "kids-tv-show",
+      "thing-in-a-kitchen",
+      "number-1-10"
+    ],
+    "2027-01-15": [
+      "board-game",
+      "pet",
+      "christmas-song",
+      "sports-team-city",
+      "meat-type",
+      "thing-at-the-beach",
+      "month-name"
+    ],
+    "2027-01-16": [
+      "job-that-works-outdoors",
+      "tv-show-2010s",
+      "thing-at-a-museum",
+      "famous-singer",
+      "famous-actor",
+      "social-media-app",
+      "red-fruit"
+    ],
+    "2027-01-17": [
+      "us-state-starting-with-n",
+      "mode-of-transportation",
+      "thing-at-a-post-office",
+      "thing-in-your-pocket",
+      "thing-in-a-pencil-case",
+      "video-game-console",
+      "tv-show"
+    ],
+    "2027-01-18": [
+      "tech-company",
+      "mountain-name",
+      "tv-sitcom",
+      "nba-team",
+      "pasta-type",
+      "thing-that-has-buttons",
+      "thing-at-a-picnic"
+    ]
+  }
+}
