@@ -27,6 +27,67 @@ function prevDay(key) {
   return new Date(Date.UTC(y, m - 1, d - 1)).toISOString().slice(0, 10);
 }
 
+const ROUND_PREFIX = 'krillion_round_';
+
+function saveRound(state) {
+  try {
+    localStorage.setItem(ROUND_PREFIX + state.dayKey, JSON.stringify({
+      dayKey: state.dayKey, cur: state.cur, tries: state.tries,
+      scores: state.scores, total: state.total, done: state.done,
+      ids: state.ids, attempts: state.attempts,
+      practice: state.practice, result: state.result
+    }));
+  } catch { /* Storage may be blocked or full; keep playing. */ }
+}
+
+function restoreRound(prompts, key) {
+  const storageKey = ROUND_PREFIX + key;
+  try {
+    const oldKeys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const storedKey = localStorage.key(i);
+      if (storedKey?.startsWith(ROUND_PREFIX) && storedKey !== storageKey) oldKeys.push(storedKey);
+    }
+    oldKeys.forEach(storedKey => localStorage.removeItem(storedKey));
+    const raw = localStorage.getItem(storageKey);
+    if (!raw) return null;
+    const saved = JSON.parse(raw);
+    if (!saved || saved.dayKey !== key || !Array.isArray(saved.ids) ||
+        saved.ids.join('|') !== prompts.map(p => p.id).join('|') ||
+        !Number.isInteger(saved.cur) || saved.cur < 0 || saved.cur >= PER_ROUND ||
+        typeof saved.done !== 'boolean' || !Array.isArray(saved.tries) ||
+        saved.tries.length > MAX_TRIES || !Array.isArray(saved.scores) ||
+        saved.scores.length !== PER_ROUND || !saved.attempts ||
+        typeof saved.attempts !== 'object' || Array.isArray(saved.attempts) ||
+        Object.keys(saved.attempts).some(i => !/^[0-6]$/.test(i))) throw new Error('Invalid round');
+    const restored = Game.createGame(prompts);
+    // Replay recorded attempts before wrapping next(), rebuilding indexes and duplicate-answer Sets.
+    for (let i = 0; i < PER_ROUND; i++) {
+      const attempts = saved.attempts[i] || [];
+      const expected = i < saved.cur || (saved.done && i === saved.cur)
+        ? MAX_TRIES : i === saved.cur ? saved.tries.length : 0;
+      if (!Array.isArray(attempts) || attempts.length !== expected) throw new Error('Invalid attempts');
+      for (const attempt of attempts) {
+        if (!attempt || typeof attempt.text !== 'string' || !attempt.text.trim() ||
+            typeof attempt.hit !== 'boolean') throw new Error('Invalid answer');
+        const result = restored.guess(attempt.text);
+        if (result.duplicate || result.hit !== attempt.hit) throw new Error('Answer list changed');
+      }
+    }
+    if (restored.cur !== saved.cur || restored.done !== saved.done ||
+        restored.total !== saved.total || restored.scores.some((score, i) => score !== saved.scores[i]) ||
+        restored.tries.some((attempt, i) => attempt.text !== saved.tries[i]?.text ||
+          attempt.hit !== saved.tries[i]?.hit)) throw new Error('Round does not match');
+    restored.practice = saved.practice === true;
+    if (saved.result && Number.isFinite(saved.result.best) && typeof saved.result.isNew === 'boolean' &&
+        Number.isInteger(saved.result.streak) && saved.result.streak >= 0) restored.result = saved.result;
+    return restored;
+  } catch {
+    try { localStorage.removeItem(storageKey); } catch { /* Storage unavailable. */ }
+    return null;
+  }
+}
+
 // 没有 schedule.json 时的确定性抽题：同一个美东日永远同一套题
 function seededPick(prompts, key, n) {
   let h = 2166136261;
@@ -57,6 +118,7 @@ async function todayPrompts(bank, key) {
 }
 
 function render(state) {
+  saveRound(state);
   const root = $('#game');
   const keepFocus = document.activeElement?.matches('input');
   root.innerHTML = '';
@@ -166,7 +228,7 @@ function render(state) {
     card.appendChild(el('pre', 'share', text));
     const buttons = el('div', 'btns');
 
-    const nb = el('button', 'wide', 'Next round · practice');
+    const nb = el('button', 'wide', 'Play unlimited mode →');
     nb.type = 'button';
     nb.addEventListener('click', () => { state.next(); state.message = ''; state.messageType = ''; render(state); });
 
@@ -206,7 +268,7 @@ async function boot() {
 
   let state;
   try {
-    state = Game.createGame(todays);
+    state = restoreRound(todays, key) || Game.createGame(todays);
   } catch (e) {
     console.error('[krillion] game.js 没有导出 createGame()', e);
     root.innerHTML = '<p class="msg bad">game.js 接口不匹配，看控制台</p>';
@@ -216,7 +278,7 @@ async function boot() {
   const prev = prevDay(key);
   const oc = state.next;
   state.dayKey = key;
-  state.practice = mode !== 'live' || !!bank.demo;
+  state.practice = state.practice === true || mode !== 'live' || !!bank.demo;
   state.next = function () {
     const restarting = this.done;
     oc && oc.apply(this, arguments);
