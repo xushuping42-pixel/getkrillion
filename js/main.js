@@ -1,4 +1,5 @@
 // js/main.js —— 入口：取题 → 渲染 → 作答 → 结算 → 分享
+import { track, trackOnce } from './analytics.js';
 import { loadBank } from './load.js';
 import { buildShare, finish, copyText, shareText } from './settle.js';
 import * as Game from './game.js';
@@ -189,7 +190,15 @@ function render(state) {
     const submit = () => {
       const text = input.value.trim();
       if (!text) return;
+      const gaIdx = state.cur + 1;
+      const gaCat = state.prompt?.cat || state.prompt?.c || 'Trivia';
+      const gaPractice = state.practice === true;
       const r = state.guess(text);       // 由 game.js 判定命中与得分
+      track('answer_submit', {
+        hit: !!(r && r.hit), duplicate: !!(r && r.duplicate),
+        points: (r && r.points) || 0, prompt_index: gaIdx,
+        category: gaCat, practice: gaPractice
+      });
       input.value = '';
       state.message = r && r.duplicate ? 'Already counted — try a different answer' :
         r && r.hit ? 'Nice — ' + r.points + ' pts' : 'Not on the list';
@@ -201,6 +210,12 @@ function render(state) {
     input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); submit(); } });
     if (keepFocus || matchMedia('(pointer:fine)').matches) input.focus({ preventScroll: true });
   } else {
+    trackOnce('round_' + state.dayKey + (state.practice ? '_p' : ''), 'round_complete', {
+      score: state.scores.reduce((a, b) => a + b, 0),
+      practice: state.practice === true,
+      streak: state.result ? state.result.streak : 0,
+      new_best: !!(state.result && state.result.isNew)
+    });
     card.appendChild(el('p', 'eyebrow', state.practice ? 'PRACTICE ROUND COMPLETE' : 'DAILY ROUND COMPLETE'));
     card.appendChild(el('h2', 'result-title', state.total >= MAX_SCORE * 0.8 ? 'Nicely played.' : 'Every guess counts.'));
     const score = state.scores.reduce((a, b) => a + b, 0);
@@ -230,18 +245,20 @@ function render(state) {
 
     const nb = el('button', 'wide', 'Play unlimited mode →');
     nb.type = 'button';
-    nb.addEventListener('click', () => { state.next(); state.message = ''; state.messageType = ''; render(state); });
+    nb.addEventListener('click', () => { track('unlimited_start', { score: state.total }); state.next(); state.message = ''; state.messageType = ''; render(state); });
 
     const sb = el('button', 'primary', 'Share result');
     sb.type = 'button';
     sb.addEventListener('click', async () => {
       const ok = await shareText(text, 'krillion unlimited');
       if (ok) sb.textContent = 'Shared ✓';
+      track('share_result', { ok });
     });
     const cb = el('button', '', 'Copy result');
     cb.type = 'button';
     cb.addEventListener('click', async () => {
       const ok = await copyText(text);
+      track('copy_result', { ok });
       cb.textContent = ok ? 'Copied ✓' : 'Copy unavailable';
     });
     buttons.append(sb, cb, nb);
@@ -286,6 +303,7 @@ async function boot() {
     if (this.done && !this.practice) this.result = finish(this, key, prev);
   };
 
+  track('round_start', { practice: state.practice === true, day: key });
   render(state);
 }
 

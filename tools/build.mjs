@@ -10,6 +10,7 @@ const DATA = path.join(ROOT, 'data');
 const STYLE_VERSION = createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'css/style.css'))).digest('hex').slice(0, 12);
 const TZ = 'America/New_York';
 const SITE = 'https://getkrillion.xyz';
+const GA_ID = 'G-PJZ74G7C2B';
 const PER_ROUND = 7;
 const MAX_SCORE = PER_ROUND * 100;   // 7 × 100 = 700
 const RECENT = 7;                    // 归档页列最近 7 天
@@ -152,6 +153,11 @@ ${o.noindex ? '<meta name="robots" content="noindex,follow">' : '<meta name="rob
 <meta property="og:image:alt" content="krillion unlimited — seven prompts a day, up to 700 points">
 <meta name="twitter:image" content="https://getkrillion.xyz/og.png">
 <meta name="twitter:card" content="summary_large_image">
+<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
+gtag('js',new Date());gtag('config','${GA_ID}',{anonymize_ip:true});
+</script>
 <link rel="stylesheet" href="/css/style.css?v=${STYLE_VERSION}">
 </head>
 <body>
@@ -184,7 +190,7 @@ const homeBody = `<section class="game-intro" aria-labelledby="game-title"><p cl
 <p>Read the prompt, type an answer, and press Enter. You have three tries per prompt. Answers are matched against a ranked list, so the more common your answer, the higher it scores. When all seven prompts are done, the round ends and you can copy your score card and share it.</p>
 
 <h2>Daily round vs unlimited mode</h2>
-<p>The daily round changes at midnight Eastern Time. Unlimited mode lets you keep playing new rounds from the same question bank, so you can practise without waiting a day. Your best score and streak are stored in your own browser — nothing is sent to a server.</p>
+<p>The daily round changes at midnight Eastern Time. Unlimited mode lets you keep playing new rounds from the same question bank, so you can practise without waiting a day. Your best score and streak are stored in your own browser, not on our server. We use anonymised analytics only to see which rounds people play.</p>
 
 <h2>Seven categories</h2>
 <p>Every round draws from the same seven categories: Animals, Geography, Food, Movies &amp; TV, Music, Sports and Trivia. The mix is shuffled each round, so no two games feel the same.</p>
