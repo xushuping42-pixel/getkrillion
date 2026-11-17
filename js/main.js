@@ -32,36 +32,38 @@ const ROUND_PREFIX = 'krillion_round_';
 
 function saveRound(state) {
   try {
-    localStorage.setItem(ROUND_PREFIX + state.dayKey, JSON.stringify({
+    localStorage.setItem(ROUND_PREFIX + state.dayKey + (state.practice ? '_p' : ''), JSON.stringify({
       dayKey: state.dayKey, cur: state.cur, tries: state.tries,
       scores: state.scores, total: state.total, done: state.done,
       ids: state.ids, attempts: state.attempts,
-      practice: state.practice, result: state.result
+      practice: state.practice, result: state.result, playedRounds: state.playedRounds
     }));
   } catch { /* Storage may be blocked or full; keep playing. */ }
 }
 
-function restoreRound(prompts, key) {
-  const storageKey = ROUND_PREFIX + key;
+function restoreRound(prompts, key, practice = false) {
+  const storageKey = ROUND_PREFIX + key + (practice ? '_p' : '');
   try {
     const oldKeys = [];
     for (let i = 0; i < localStorage.length; i++) {
       const storedKey = localStorage.key(i);
-      if (storedKey?.startsWith(ROUND_PREFIX) && storedKey !== storageKey) oldKeys.push(storedKey);
+      if (storedKey?.startsWith(ROUND_PREFIX) &&
+          storedKey !== ROUND_PREFIX + key && storedKey !== ROUND_PREFIX + key + '_p') oldKeys.push(storedKey);
     }
     oldKeys.forEach(storedKey => localStorage.removeItem(storedKey));
     const raw = localStorage.getItem(storageKey);
     if (!raw) return null;
     const saved = JSON.parse(raw);
     if (!saved || saved.dayKey !== key || !Array.isArray(saved.ids) ||
-        saved.ids.join('|') !== prompts.map(p => p.id).join('|') ||
+        (saved.practice === true) !== practice ||
+        (!practice && saved.ids.join('|') !== prompts.map(p => p.id).join('|')) ||
         !Number.isInteger(saved.cur) || saved.cur < 0 || saved.cur >= PER_ROUND ||
         typeof saved.done !== 'boolean' || !Array.isArray(saved.tries) ||
         saved.tries.length > MAX_TRIES || !Array.isArray(saved.scores) ||
         saved.scores.length !== PER_ROUND || !saved.attempts ||
         typeof saved.attempts !== 'object' || Array.isArray(saved.attempts) ||
         Object.keys(saved.attempts).some(i => !/^[0-6]$/.test(i))) throw new Error('Invalid round');
-    const restored = Game.createGame(prompts);
+    const restored = Game.createGame(prompts, saved.ids);
     // Replay recorded attempts before wrapping next(), rebuilding indexes and duplicate-answer Sets.
     for (let i = 0; i < PER_ROUND; i++) {
       const attempts = saved.attempts[i] || [];
@@ -80,6 +82,8 @@ function restoreRound(prompts, key) {
         restored.tries.some((attempt, i) => attempt.text !== saved.tries[i]?.text ||
           attempt.hit !== saved.tries[i]?.hit)) throw new Error('Round does not match');
     restored.practice = saved.practice === true;
+    restored.playedRounds = Array.isArray(saved.playedRounds)
+      ? saved.playedRounds.filter(value => typeof value === 'string') : [];
     if (saved.result && Number.isFinite(saved.result.best) && typeof saved.result.isNew === 'boolean' &&
         Number.isInteger(saved.result.streak) && saved.result.streak >= 0) restored.result = saved.result;
     return restored;
@@ -118,7 +122,71 @@ async function todayPrompts(bank, key) {
   return seededPick(bank.prompts, key, PER_ROUND);
 }
 
-function render(state) {
+function roundSignature(values) {
+  return values.slice().sort().join('|');
+}
+
+function promptKey(prompt) {
+  return prompt.p.trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
+function practicePool(bank, excludedIds) {
+  const excluded = new Set(excludedIds);
+  const wording = new Set(bank.prompts.filter(p => excluded.has(p.id)).map(promptKey));
+  return [...new Map(bank.prompts.filter(p => !wording.has(promptKey(p)))
+    .map(p => [promptKey(p), p])).values()];
+}
+
+function startPractice(state, bank) {
+  // Avoid today's prompts and the preceding round whenever the bank is large enough.
+  let pool = practicePool(bank, [...(state.dailyIds || []), ...state.ids]);
+  if (pool.length < PER_ROUND) pool = practicePool(bank, state.ids);
+  if (pool.length < PER_ROUND) {
+    state.next(); // The offline mini bank only has seven prompts; its button says Replay.
+    return;
+  }
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  const played = new Set(state.playedRounds || []);
+  const selection = Array.from({ length: PER_ROUND }, (_, i) => i);
+  let prompts = selection.map(i => pool[i]);
+  // If a shuffle repeats an earlier set, advance to another combination, without retry loops.
+  while (played.has(roundSignature(prompts.map(promptKey)))) {
+    let i = PER_ROUND - 1;
+    while (i >= 0 && selection[i] === pool.length - PER_ROUND + i) i--;
+    if (i < 0) { state.next(); return; }
+    selection[i]++;
+    for (let j = i + 1; j < PER_ROUND; j++) selection[j] = selection[j - 1] + 1;
+    prompts = selection.map(i => pool[i]);
+  }
+  const fresh = Game.createGame(prompts);
+  played.add(roundSignature(prompts.map(promptKey)));
+  // Copy only data: keep next()'s daily/practice wrapper and the existing guess() method.
+  Object.assign(state, {
+    rounds: fresh.rounds, ids: fresh.ids, indexes: fresh.indexes,
+    cur: 0, scores: fresh.scores, found: {}, attempts: {}, done: false, total: 0,
+    result: null, practice: true, playedRounds: [...played]
+  });
+}
+
+function nextDailyAt(now = Date.now()) {
+  const key = dayKey(new Date(now));
+  let low = now, high = now + 27 * 60 * 60 * 1000;
+  // Find the next Eastern date boundary, including 23- and 25-hour DST days.
+  while (high - low > 1) {
+    const mid = Math.floor((low + high) / 2);
+    if (dayKey(new Date(mid)) === key) low = mid;
+    else high = mid;
+  }
+  return high;
+}
+
+let dailyCountdownTimer;
+
+function render(state, bank) {
+  clearInterval(dailyCountdownTimer);
   saveRound(state);
   const root = $('#game');
   const keepFocus = document.activeElement?.matches('input');
@@ -204,13 +272,13 @@ function render(state) {
         r && r.hit ? 'Nice — ' + r.points + ' pts' : 'Not on the list';
       state.messageType = r && !r.duplicate ? r.hit ? 'good' : 'bad' : '';
       if (r && r.roundDone) { state.message = ''; state.messageType = ''; }
-      render(state);
+      render(state, bank);
     };
     btn.addEventListener('click', submit);
     input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); submit(); } });
     if (keepFocus || matchMedia('(pointer:fine)').matches) input.focus({ preventScroll: true });
   } else {
-    trackOnce('round_' + state.dayKey + (state.practice ? '_p' : ''), 'round_complete', {
+    trackOnce('round_' + state.dayKey + (state.practice ? '_p_' + roundSignature(state.ids) : ''), 'round_complete', {
       score: state.scores.reduce((a, b) => a + b, 0),
       practice: state.practice === true,
       streak: state.result ? state.result.streak : 0,
@@ -243,9 +311,14 @@ function render(state) {
     card.appendChild(el('pre', 'share', text));
     const buttons = el('div', 'btns');
 
-    const nb = el('button', 'wide', 'Play unlimited mode →');
+    const nb = el('button', 'wide', practicePool(bank, state.ids).length >= PER_ROUND ? 'Play unlimited mode →' : 'Replay round →');
     nb.type = 'button';
-    nb.addEventListener('click', () => { track('unlimited_start', { score: state.total }); state.next(); state.message = ''; state.messageType = ''; render(state); });
+    nb.addEventListener('click', () => {
+      track('unlimited_start', { score: state.total });
+      startPractice(state, bank);
+      state.message = ''; state.messageType = '';
+      render(state, bank);
+    });
 
     const sb = el('button', 'primary', 'Share result');
     sb.type = 'button';
@@ -263,6 +336,34 @@ function render(state) {
     });
     buttons.append(sb, cb, nb);
     card.appendChild(buttons);
+
+    const answers = el('a', '', "See today's answers →");
+    answers.href = '/answers/' + state.dayKey + '/';
+    const answersLine = el('p', 'meta');
+    answersLine.appendChild(answers);
+    card.appendChild(answersLine);
+
+    const countdown = el('p', 'meta');
+    countdown.setAttribute('role', 'timer');
+    countdown.setAttribute('aria-live', 'off');
+    const unlockAt = nextDailyAt();
+    const updateCountdown = () => {
+      const seconds = Math.max(0, Math.ceil((unlockAt - Date.now()) / 1000));
+      if (!seconds) {
+        clearInterval(dailyCountdownTimer);
+        countdown.textContent = 'The next daily round is ready. ';
+        const play = el('a', '', "Play today's round →");
+        play.href = '/';
+        countdown.appendChild(play);
+        return;
+      }
+      const time = [Math.floor(seconds / 3600), Math.floor(seconds / 60) % 60, seconds % 60]
+        .map(value => String(value).padStart(2, '0')).join(':');
+      countdown.textContent = 'Next daily round in ' + time;
+    };
+    updateCountdown();
+    dailyCountdownTimer = setInterval(updateCountdown, 1000);
+    card.appendChild(countdown);
   }
 
   root.appendChild(card);
@@ -285,7 +386,7 @@ async function boot() {
 
   let state;
   try {
-    state = restoreRound(todays, key) || Game.createGame(todays);
+    state = restoreRound(bank.prompts, key, true) || restoreRound(todays, key) || Game.createGame(todays);
   } catch (e) {
     console.error('[krillion] game.js 没有导出 createGame()', e);
     root.innerHTML = '<p class="msg bad">game.js 接口不匹配，看控制台</p>';
@@ -295,6 +396,8 @@ async function boot() {
   const prev = prevDay(key);
   const oc = state.next;
   state.dayKey = key;
+  state.dailyIds = todays.map(p => p.id);
+  state.playedRounds = state.playedRounds || [];
   state.practice = state.practice === true || mode !== 'live' || !!bank.demo;
   state.next = function () {
     const restarting = this.done;
@@ -304,7 +407,7 @@ async function boot() {
   };
 
   track('round_start', { practice: state.practice === true, day: key });
-  render(state);
+  render(state, bank);
 }
 
 if (document.readyState === 'loading') {
