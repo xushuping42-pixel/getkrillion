@@ -15,6 +15,16 @@ const PER_ROUND = 7;
 const MAX_SCORE = PER_ROUND * 100;   // 7 × 100 = 700
 const RECENT = 7;                    // 归档页列最近 7 天
 
+function todayET() {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit'
+  }).format(new Date());
+}
+
+// 一次构建固定使用同一个美东日期，避免跨午夜时产物不一致。
+const today = todayET();
+const tomorrow = new Date(Date.parse(today + 'T00:00:00Z') + 86400000).toISOString().slice(0, 10);
+
 const read = (p) => fs.readFileSync(p, 'utf8');
 const readJSON = (p) => JSON.parse(read(p).replace(/^\uFEFF/, ''));
 const die = (m) => { console.error('BUILD FAILED: ' + m); process.exit(1); };
@@ -94,17 +104,18 @@ if (fs.existsSync(schedPath)) {
 }
 if (SCHED && isDemo) die('演示题库不允许带排期生成答案页，请把 schedule.start 留空');
 
-// 清理旧排期产物，确保日期目录与当前排期一致；不递归删除目录。
+const publishedDays = SCHED ? Object.keys(SCHED.days).filter(d => d <= today).sort() : [];
+
+// 生成前清空日期目录，避免旧的未来页面残留在部署产物中。
 const answersRoot = path.join(ROOT, 'answers');
-const scheduledDates = new Set(SCHED ? Object.keys(SCHED.days) : []);
 if (fs.existsSync(answersRoot)) {
+  if (fs.lstatSync(answersRoot).isSymbolicLink()) die('答案目录不能是符号链接');
   for (const entry of fs.readdirSync(answersRoot, { withFileTypes: true })) {
-    if (!entry.isDirectory() || !/^\d{4}-\d{2}-\d{2}$/.test(entry.name) || scheduledDates.has(entry.name)) continue;
+    if (!entry.isDirectory() || !/^\d{4}-\d{2}-\d{2}$/.test(entry.name)) continue;
     const directory = path.resolve(answersRoot, entry.name);
-    if (path.dirname(directory) !== path.resolve(answersRoot)) die('旧归档路径越界');
-    const index = path.join(directory, 'index.html');
-    if (fs.existsSync(index) && fs.lstatSync(index).isFile()) fs.unlinkSync(index);
-    if (fs.readdirSync(directory).length === 0) fs.rmdirSync(directory);
+    if (path.dirname(directory) !== path.resolve(answersRoot) ||
+        !directory.startsWith(path.resolve(ROOT) + path.sep)) die('旧归档路径越界');
+    fs.rmSync(directory, { recursive: true });
   }
 }
 
@@ -197,7 +208,7 @@ const homeBody = `<section class="game-intro" aria-labelledby="game-title"><p cl
 
 <h2>Looking for the answers?</h2>
 <p>If you are stuck or you want to check a round afterwards, see <a href="/answers/">today's Krillion answers</a>. The same page collects <a href="/answers/">Krillion hints</a> for prompts that are harder than they look.</p>
-<p>Latest round: <a href="/answers/2026-11-16/">krillion answers for today</a> · <a href="/answers/2026-11-17/">tomorrow's round</a> · <a href="/answers/">all recent answers</a></p>
+<p>Latest round: <a href="/answers/${today}/">krillion answers for today</a> · <a href="/answers/${tomorrow}/">tomorrow's round</a> · <a href="/answers/">all recent answers</a></p>
 </div>`;
 
 write('index.html', shell({
@@ -210,19 +221,15 @@ write('index.html', shell({
 }));
 
 // ---------- 5. 答案页与归档（只有排期有 start 才生成） ----------
-const urls = [{ loc: '/', lastmod: new Date().toISOString().slice(0, 10) }];
+const urls = [{ loc: '/', lastmod: today }];
 
 if (SCHED) {
   const byId = new Map(P.map((p) => [p.id, p]));
-  const days = Object.keys(SCHED.days).sort();
-  const todayParts = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
-    timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit'
-  }).formatToParts(new Date()).map(part => [part.type, part.value]));
-  const today = `${todayParts.year}-${todayParts.month}-${todayParts.day}`;
+  const days = publishedDays;
   const recent = days.filter(d => d >= SCHED.start && d <= today).reverse().slice(0, RECENT);
   const recentNote = recent.length
     ? `Showing the latest scheduled rounds on or before ${today} (Eastern Time), newest first.`
-    : `No rounds have gone live on or before ${today} (Eastern Time). The first scheduled round starts on ${SCHED.start}.`;
+    : `No rounds have gone live on or before ${today} (Eastern Time).`;
   const todayNote = recent.includes(today)
     ? "Today's scheduled round is the first entry above."
     : recent.length
@@ -232,19 +239,13 @@ if (SCHED) {
   // 5a. 归档页 /answers/
   const roundLink = (d) => `<li><a href="/answers/${d}/">${d}</a> — ${esc(byId.get(SCHED.days[d][0]).c)} round</li>`;
   const recentList = recent.map(roundLink).join('\n');
-  const allScheduledList = days.map(roundLink).join('\n');
-  const answersBody = `<p>Every round of krillion unlimited is built from seven prompts. This page lists the most recent rounds with the full answer list for each one, so you can check a prompt you missed or look ahead before you play.</p>
+  const answersBody = `<p>Every round of krillion unlimited is built from seven prompts. This page lists the most recent published rounds with the full answer list for each one, so you can check a prompt you missed after you play.</p>
 
 <h2>Recent rounds</h2>
 <ul class="days">
 ${recentList}
 </ul>
 <p>${esc(recentNote)}</p>
-
-<h2>All scheduled rounds</h2>
-<ul class="days">
-${allScheduledList}
-</ul>
 
 <h2>krillion answers today</h2>
 <p>${esc(todayNote)} Each daily page lists all seven prompts and the accepted answers in ranking order, so you can see which answers were worth the most points.</p>
@@ -271,7 +272,7 @@ ${allScheduledList}
     body: answersBody,
     noindex: false
   }));
-  urls.push({ loc: '/answers/', lastmod: new Date().toISOString().slice(0, 10) });
+  urls.push({ loc: '/answers/', lastmod: today });
 
   // 5b. 一天一页 /answers/YYYY-MM-DD/
   days.forEach((d, i) => {
@@ -306,7 +307,7 @@ ${blocks}
 <p class="pager">
 ${prev ? `<a href="/answers/${prev}/">← ${prev}</a>` : '<span></span>'}
 <a href="/answers/">All recent rounds</a>
-${next ? `<a href="/answers/${next}/">${next} →</a>` : '<span></span>'}
+${next && next <= today ? `<a href="/answers/${next}/">${next} →</a>` : '<span></span>'}
 </p>`;
 
     write('answers/' + d + '/index.html', shell({
@@ -317,7 +318,7 @@ ${next ? `<a href="/answers/${next}/">${next} →</a>` : '<span></span>'}
       body: dayBody,
       noindex: false
     }));
-    urls.push({ loc: '/answers/' + d + '/', lastmod: new Date().toISOString().slice(0, 10) });
+    urls.push({ loc: '/answers/' + d + '/', lastmod: d });
   });
 } else {
   // 没有排期也给一个 /answers/ 外壳，避免导航 404
@@ -336,6 +337,10 @@ ${next ? `<a href="/answers/${next}/">${next} →</a>` : '<span></span>'}
 }
 
 // ---------- 6. sitemap.xml ----------
+for (const { loc } of urls) {
+  const date = loc.match(/^\/answers\/(\d{4}-\d{2}-\d{2})\/$/)?.[1];
+  if (date && date > today) throw new Error('Sitemap contains a future round: ' + loc);
+}
 const sm = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url>
@@ -365,7 +370,7 @@ console.log('');
 console.log('done.');
 console.log('  mode      : ' + (isDemo ? 'DEMO' : 'LIVE'));
 console.log('  prompts   : ' + P.length);
-console.log('  rounds    : ' + (SCHED ? Object.keys(SCHED.days).length : 0));
+console.log('  rounds    : ' + publishedDays.length);
 console.log('  sitemap   : ' + urls.length + ' urls');
 if (isDemo) console.log('  note      : 演示构建，robots 全站 Disallow、答案页未生成');
 if (!SCHED) console.log('  note      : schedule.start 为空，答案页未生成');
