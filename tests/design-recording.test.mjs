@@ -20,6 +20,7 @@ function workspace(t) {
 const reveal = date => ({ date, prompts: Array.from({ length: 7 }, (_, i) => ({ id: 'p' + (i + 1), text: 'Question ' + (i + 1), answers: [{ answer: 'Recorded answer ' + i, aliases: [], score: 100, tier: 'krillion' }] })) });
 const response = data => ({ ok: true, status: 200, headers: new Headers({ 'content-type': 'application/json' }), json: async () => data });
 const snapshotPath = root => path.join(root, 'design/phase-one/reveal-snapshot.json');
+const isolatedEnvironment = { ...process.env, REVEAL_REFRESH: 'false', REVEAL_BUILD: 'preview', REVEAL_NOTIFICATION_CONFIGURED: 'false' };
 
 test('winter runs record different Eastern dates and never stop the later new-day run', async t => {
   const root = workspace(t), requested = [];
@@ -88,7 +89,7 @@ test('an explicit cloud source recheck replaces cached data only after validatio
 test('a build failure is reported separately from successful capture', async t => {
   const root = workspace(t), day = easternDate();
   await recordReveal({ root, fetchImpl: async () => response(reveal(day)) });
-  const result = spawnSync(process.execPath, [fileURLToPath(new URL('../tools/update-design.mjs', import.meta.url))], { cwd: root, encoding: 'utf8' });
+  const result = spawnSync(process.execPath, [fileURLToPath(new URL('../tools/update-design.mjs', import.meta.url))], { cwd: root, encoding: 'utf8', env: isolatedEnvironment });
   assert.equal(result.status, 1);
   const report = JSON.parse(fs.readFileSync(path.join(root, 'design/phase-one/record-status.json')));
   assert.equal(report.capture, 'already-recorded'); assert.equal(report.validation, 'passed'); assert.equal(report.build, 'failed');
@@ -102,7 +103,7 @@ test('Eastern midnight calculations respect 23-hour and 25-hour days', () => {
 test('capture-only persists a validated record before any build runs', async t => {
   const root = workspace(t);
   await recordReveal({ root, fetchImpl: async () => response(reveal(easternDate())) });
-  const result = spawnSync(process.execPath, [fileURLToPath(new URL('../tools/update-design.mjs', import.meta.url)), '--capture-only'], { cwd: root, encoding: 'utf8' });
+  const result = spawnSync(process.execPath, [fileURLToPath(new URL('../tools/update-design.mjs', import.meta.url)), '--capture-only'], { cwd: root, encoding: 'utf8', env: isolatedEnvironment });
   assert.equal(result.status, 0, result.stderr);
   const report = JSON.parse(fs.readFileSync(path.join(root, 'design/phase-one/record-status.json')));
   assert.equal(report.capture, 'already-recorded');
@@ -119,7 +120,7 @@ test('build-only uses the last saved edition after capture failure without anoth
   fs.mkdirSync(path.join(root, 'tools'));
   fs.writeFileSync(path.join(root, 'tools/build-design.mjs'), 'console.log("Saved edition rebuild completed");');
   fs.writeFileSync(path.join(root, 'no-network.mjs'), 'globalThis.fetch = () => { throw new Error("Unexpected network request during build"); };');
-  const result = spawnSync(process.execPath, ['--import', pathToFileURL(path.join(root, 'no-network.mjs')).href, fileURLToPath(new URL('../tools/update-design.mjs', import.meta.url)), '--build-only'], { cwd: root, encoding: 'utf8' });
+  const result = spawnSync(process.execPath, ['--import', pathToFileURL(path.join(root, 'no-network.mjs')).href, fileURLToPath(new URL('../tools/update-design.mjs', import.meta.url)), '--build-only'], { cwd: root, encoding: 'utf8', env: isolatedEnvironment });
   assert.equal(result.status, 0, result.stderr);
   const report = JSON.parse(fs.readFileSync(path.join(directory, 'record-status.json')));
   assert.equal(report.capture, 'failed'); assert.equal(report.build, 'passed');

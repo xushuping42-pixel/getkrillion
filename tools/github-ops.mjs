@@ -32,6 +32,17 @@ if (command === 'status') {
   const run = await api('/actions/runs/' + process.argv[3]);
   const jobs = await api('/actions/runs/' + process.argv[3] + '/jobs');
   console.log(JSON.stringify({ id: run.id, status: run.status, conclusion: run.conclusion, url: run.html_url, jobs: jobs.jobs.map(j => ({ name: j.name, status: j.status, conclusion: j.conclusion, steps: j.steps.map(s => ({ name: s.name, status: s.status, conclusion: s.conclusion })) })) }, null, 2));
+} else if (command === 'logs') {
+  if (!/^\d+$/.test(process.argv[3] || '')) throw new Error('Supply a numeric run ID');
+  const jobs = await api('/actions/runs/' + process.argv[3] + '/jobs');
+  for (const job of jobs.jobs.filter(j => j.conclusion === 'failure')) {
+    const result = await fetch(`https://api.github.com/repos/${repository}/actions/jobs/${job.id}/logs`, { headers, signal: AbortSignal.timeout(30000) });
+    if (!result.ok) throw new Error('GitHub job logs unavailable');
+    const lines = (await result.text()).split('\n');
+    const selected = new Set();
+    lines.forEach((line, i) => { if (/not ok|AssertionError|ERR_ASSERTION|Error:|✖|error:/.test(line)) for (let n = Math.max(0, i - 2); n <= Math.min(lines.length - 1, i + 10); n++) selected.add(n); });
+    console.log([...selected].sort((a, b) => a - b).map(i => lines[i]).join('\n').slice(0, 16000));
+  }
 } else if (command === 'secret') {
   console.log('Waiting for one secret value on stdin (not echoed or logged).');
   if (process.stdin.isTTY) process.stdin.setRawMode(true);

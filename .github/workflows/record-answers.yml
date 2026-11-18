@@ -35,9 +35,6 @@ jobs:
     timeout-minutes: 20
     env:
       REVEAL_SCHEDULE: enabled
-      REVEAL_BUILD: production
-      REVEAL_REFRESH: ${{ github.event_name == 'push' || inputs.refresh_source == true }}
-      REVEAL_NOTIFICATION_CONFIGURED: ${{ secrets.WECHAT_WEBHOOK != '' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -51,6 +48,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
       - name: Verify capture and publication guards
+        id: checks
         run: node --test
       - name: Send requested WeChat test
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.notification_test }}
@@ -60,6 +58,9 @@ jobs:
         run: node tools/notify-failure.mjs
       - name: Capture and validate seven official prompts
         id: capture
+        env:
+          REVEAL_REFRESH: ${{ github.event_name == 'push' || inputs.refresh_source == true }}
+          REVEAL_NOTIFICATION_CONFIGURED: ${{ secrets.WECHAT_WEBHOOK != '' }}
         run: node tools/update-design.mjs --capture-only
       - name: Persist snapshots before attempting the page build
         id: persist
@@ -71,6 +72,8 @@ jobs:
           git push origin HEAD:main
       - name: Build guide from saved records
         id: build
+        env:
+          REVEAL_BUILD: production
         if: ${{ !cancelled() && steps.persist.outcome == 'success' }}
         run: node tools/update-design.mjs --build-only
       - name: Publish generated pages through Cloudflare Git integration
@@ -82,6 +85,7 @@ jobs:
           git pull --rebase origin main
           git push origin HEAD:main
       - name: Verify Cloudflare actually serves the expected release
+        id: verify
         if: ${{ !cancelled() && steps.publish.outcome == 'success' }}
         run: node tools/verify-deployment.mjs
       - name: Save final run status
@@ -95,6 +99,7 @@ jobs:
         if: ${{ failure() }}
         env:
           WECHAT_WEBHOOK: ${{ secrets.WECHAT_WEBHOOK }}
+          REVEAL_FAILURE_STAGE: ${{ steps.checks.outcome == 'failure' && 'tests' || steps.capture.outcome == 'failure' && 'capture' || steps.persist.outcome == 'failure' && 'save-snapshot' || steps.build.outcome == 'failure' && 'build' || steps.publish.outcome == 'failure' && 'push-pages' || steps.verify.outcome == 'failure' && 'verify-deployment' || 'setup-or-status' }}
         run: node tools/notify-failure.mjs
       - name: Keep a recovery copy after failure
         if: ${{ failure() }}
