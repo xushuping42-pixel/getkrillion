@@ -4,7 +4,7 @@
   "capture": "saved",
   "validation": "passed",
   "build": "passed",
-  "deployment": "not-configured",
+  "deployment": "passed",
   "notification": "configured",
   "schedule": "enabled",
   "date": "2026-11-18",
