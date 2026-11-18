@@ -2,11 +2,16 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
 
-/css/*
+/assets/*
   Cache-Control: public, max-age=0, must-revalidate
+  X-Robots-Tag: noindex
 
-/js/*
-  Cache-Control: public, max-age=0, must-revalidate
+/design/*
+  X-Robots-Tag: noindex, nofollow
 
-/data/*
-  Cache-Control: public, max-age=0, must-revalidate
+/search/*
+  X-Robots-Tag: noindex, follow
+
+/release.json
+  Cache-Control: no-cache
+  X-Robots-Tag: noindex

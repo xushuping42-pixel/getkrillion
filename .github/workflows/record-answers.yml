@@ -1,0 +1,112 @@
+name: record-official-answers
+on:
+  schedule:
+    - cron: '20 4,5 * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/**'
+      - 'tests/**'
+      - 'design/phase-one/*.js'
+      - 'design/phase-one/*.mjs'
+      - 'design/phase-one/*.css'
+      - 'design/phase-one/template.html'
+      - '.github/workflows/record-answers.yml'
+      - 'package.json'
+  workflow_dispatch:
+    inputs:
+      refresh_source:
+        description: Recheck the official API even if today's record is cached
+        type: boolean
+        default: false
+      notification_test:
+        description: Send a WeChat test notification
+        type: boolean
+        default: false
+permissions:
+  contents: write
+concurrency:
+  group: daily-content-writes
+  cancel-in-progress: false
+jobs:
+  record:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      REVEAL_SCHEDULE: enabled
+      REVEAL_BUILD: production
+      REVEAL_REFRESH: ${{ github.event_name == 'push' || inputs.refresh_source == true }}
+      REVEAL_NOTIFICATION_CONFIGURED: ${{ secrets.WECHAT_WEBHOOK != '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Configure record commits
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Verify capture and publication guards
+        run: node --test
+      - name: Send requested WeChat test
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.notification_test }}
+        env:
+          WECHAT_WEBHOOK: ${{ secrets.WECHAT_WEBHOOK }}
+          NOTIFICATION_TEST: 'true'
+        run: node tools/notify-failure.mjs
+      - name: Capture and validate seven official prompts
+        id: capture
+        run: node tools/update-design.mjs --capture-only
+      - name: Persist snapshots before attempting the page build
+        id: persist
+        if: ${{ !cancelled() && (steps.capture.outcome == 'success' || steps.capture.outcome == 'failure') }}
+        run: |
+          git add -A -- design/phase-one
+          git diff --cached --quiet || git commit -m "chore: save official Krillion answer record"
+          git pull --rebase origin main
+          git push origin HEAD:main
+      - name: Build guide from saved records
+        id: build
+        if: ${{ !cancelled() && steps.persist.outcome == 'success' }}
+        run: node tools/update-design.mjs --build-only
+      - name: Publish generated pages through Cloudflare Git integration
+        id: publish
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          git add -A
+          git diff --cached --quiet || git commit -m "chore: publish recorded Krillion answers"
+          git pull --rebase origin main
+          git push origin HEAD:main
+      - name: Verify Cloudflare actually serves the expected release
+        if: ${{ !cancelled() && steps.publish.outcome == 'success' }}
+        run: node tools/verify-deployment.mjs
+      - name: Save final run status
+        if: ${{ !cancelled() && (steps.capture.outcome == 'success' || steps.capture.outcome == 'failure') }}
+        run: |
+          git add -- design/phase-one/record-status.json
+          git diff --cached --quiet || git commit -m "chore: record Krillion deployment status"
+          git pull --rebase origin main
+          git push origin HEAD:main
+      - name: Notify WeChat on any failure
+        if: ${{ failure() }}
+        env:
+          WECHAT_WEBHOOK: ${{ secrets.WECHAT_WEBHOOK }}
+        run: node tools/notify-failure.mjs
+      - name: Keep a recovery copy after failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: official-record-recovery-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            design/phase-one/records/*.json
+            design/phase-one/reveal-snapshot.json
+            design/phase-one/record-status.json
+          if-no-files-found: warn
+          retention-days: 7
+      - name: Show capture and deployment status
+        if: ${{ !cancelled() && (steps.capture.outcome == 'success' || steps.capture.outcome == 'failure') }}
+        run: cat design/phase-one/record-status.json >> "$GITHUB_STEP_SUMMARY"

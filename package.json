@@ -2,7 +2,9 @@
   "name": "krillion-unlimited",
   "private": true,
   "scripts": {
-    "build": "node tools/build.mjs",
+    "build": "node tools/build-guide.mjs",
+    "build:preview": "node tools/build-design.mjs",
+    "update:answers": "node tools/update-design.mjs",
     "test": "node --test",
     "dev": "node tools/dev.mjs"
   },

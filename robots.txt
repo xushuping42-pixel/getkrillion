@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /data/
-
+Disallow: /tools/
+Disallow: /tests/
 Sitemap: https://getkrillion.xyz/sitemap.xml
