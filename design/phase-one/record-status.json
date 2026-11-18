@@ -4,7 +4,7 @@
   "capture": "already-recorded",
   "validation": "passed",
   "build": "passed",
-  "deployment": "not-configured",
+  "deployment": "failed",
   "notification": "configured",
   "schedule": "enabled",
   "date": "2026-11-18",
