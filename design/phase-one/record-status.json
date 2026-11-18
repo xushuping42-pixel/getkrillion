@@ -1,14 +1,14 @@
 {
   "targetDate": "2026-11-18",
-  "runAt": "2026-11-18T09:23:41.504Z",
-  "capture": "already-recorded",
+  "runAt": "2026-11-18T10:01:43.281Z",
+  "capture": "saved",
   "validation": "passed",
-  "build": "passed",
-  "deployment": "passed",
+  "build": "not-run",
+  "deployment": "not-configured",
   "notification": "configured",
   "schedule": "enabled",
   "date": "2026-11-18",
-  "fetchedAt": "2026-11-18T09:14:54.876Z",
+  "fetchedAt": "2026-11-18T10:01:43.282Z",
   "prompts": 7,
   "answers": 72646
 }
