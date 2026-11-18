@@ -45,7 +45,11 @@ function head(html, { url, title, description, index = true, breadcrumbs = [] })
 <link rel="canonical" href="${site}${url}">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Krillion Fieldnotes">
 <meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${site}${url}">
-<meta name="twitter:card" content="summary"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(description)}">
+<meta property="og:image" content="${site}/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="${site}/og.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(description)}">
 <script type="application/ld+json">${json(structured)}</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PJZ74G7C2B"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-PJZ74G7C2B',{anonymize_ip:true,page_location:location.origin+location.pathname});</script>
