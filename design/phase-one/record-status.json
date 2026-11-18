@@ -1,14 +1,14 @@
 {
   "targetDate": "2026-11-18",
-  "runAt": "2026-11-18T08:37:08.134Z",
-  "capture": "already-recorded",
+  "runAt": "2026-11-18T09:14:54.876Z",
+  "capture": "saved",
   "validation": "passed",
-  "build": "passed",
-  "deployment": "local-check-passed",
-  "notification": "not-configured",
-  "schedule": "not-enabled",
+  "build": "not-run",
+  "deployment": "not-configured",
+  "notification": "configured",
+  "schedule": "enabled",
   "date": "2026-11-18",
-  "fetchedAt": "2026-11-18T05:54:02.193Z",
+  "fetchedAt": "2026-11-18T09:14:54.876Z",
   "prompts": 7,
-  "answers": 69625
+  "answers": 72646
 }
