@@ -3,7 +3,7 @@
   "runAt": "2026-11-19T13:19:53.423Z",
   "capture": "already-recorded",
   "validation": "passed",
-  "build": "not-run",
+  "build": "passed",
   "deployment": "not-configured",
   "notification": "configured",
   "schedule": "enabled",
