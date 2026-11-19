@@ -52,7 +52,17 @@ function head(html, { url, title, description, index = true, breadcrumbs = [] })
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(description)}">
 <script type="application/ld+json">${json(structured)}</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PJZ74G7C2B"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-PJZ74G7C2B',{anonymize_ip:true,page_location:location.origin+location.pathname});</script>
+<script>
+(function(){
+  var p=new URLSearchParams(location.search), k=new URLSearchParams();
+  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid'].forEach(function(n){if(p.get(n))k.set(n,p.get(n));});
+  var q=k.toString();
+  window.dataLayer=window.dataLayer||[];
+  window.gtag=window.gtag||function(){window.dataLayer.push(arguments)};
+  window.gtag('js',new Date());
+  window.gtag('config','G-PJZ74G7C2B',{anonymize_ip:true,page_location:location.origin+location.pathname+(q?'?'+q:'')});
+})();
+</script>
 <script src="/assets/guide/site.js?v=${version}" type="module"></script></head>`);
 }
 function publish(file, metadata, change = html => html) {
