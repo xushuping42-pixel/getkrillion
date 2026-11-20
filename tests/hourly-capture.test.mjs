@@ -63,3 +63,8 @@ test('prepare-only persists a stable pending message before any network send',as
  const prepared=JSON.parse(fs.readFileSync(path.join(root,'design/phase-one/alert-state.json')));assert.ok(prepared['2026-11-19-2'].payload);assert.ok(!prepared['2026-11-19-2'].sentAt);
  await alertReveal({root,now:'2026-11-19T08:17:00Z',env,fetchImpl});assert.equal(calls,1);
 });
+
+test('status build clock comes from the persisted run, keeping CI and Cloudflare output identical',t=>{
+ const root=workspace(t);failure(root);const file=path.join(root,'design/phase-one/record-status.json');const report=JSON.parse(fs.readFileSync(file));report.runAt='2026-11-19T08:17:00.000Z';fs.writeFileSync(file,JSON.stringify(report));
+ const a=renderStatus({root}),b=renderStatus({root});assert.equal(a,b);assert.ok(a.includes('Last automated check: 2026-11-19T08:17:00.000Z'));assert.equal((a.match(/<li class=/g)||[]).length,14);
+});
