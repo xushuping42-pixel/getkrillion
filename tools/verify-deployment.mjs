@@ -35,5 +35,7 @@ try {
   if ((await read(`/answers/${future}/`)).response.status !== 404) throw new Error('An unrecorded future edition is not returning 404');
   const search = await read('/search/?q=verification');
   if (!search.response.ok || !search.text.includes('noindex,follow')) throw new Error('Search result indexing guard is missing');
+  const status = await read('/status/');
+  if (!status.response.ok || !status.text.includes('noindex,follow') || (status.text.match(/<li class=/g) || []).length !== 14) throw new Error('Snapshot status page verification failed');
   save(local ? 'local-check-passed' : 'passed'); console.log(`Verified ${local ? 'local' : 'production'} release ${expected.id}: ${expected.indexedPages} indexable pages, dated answers, future 404 and search noindex.`);
 } catch (error) { save('failed'); throw error; }

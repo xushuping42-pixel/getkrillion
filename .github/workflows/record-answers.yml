@@ -1,7 +1,7 @@
 name: record-official-answers
 on:
   schedule:
-    - cron: '20 4,5 * * *'
+    - cron: '17 * * * *'
   push:
     branches: [main]
     paths:
@@ -15,6 +15,10 @@ on:
       - 'package.json'
   workflow_dispatch:
     inputs:
+      date:
+        description: 'Optional Eastern date to backfill (YYYY-MM-DD); requires refresh_source'
+        type: string
+        default: ''
       refresh_source:
         description: Recheck the official API even if today's record is cached
         type: boolean
@@ -59,15 +63,44 @@ jobs:
       - name: Capture and validate seven official prompts
         id: capture
         env:
-          REVEAL_REFRESH: ${{ github.event_name == 'push' || inputs.refresh_source == true }}
           REVEAL_NOTIFICATION_CONFIGURED: ${{ secrets.WECHAT_WEBHOOK != '' }}
-        run: node tools/update-design.mjs --capture-only
+          CAPTURE_DATE: ${{ inputs.date }}
+          CAPTURE_FORCE: ${{ inputs.refresh_source }}
+        run: |
+          args=()
+          if [ -n "$CAPTURE_DATE" ]; then args+=("--date=$CAPTURE_DATE"); fi
+          if [ "$CAPTURE_FORCE" = "true" ]; then args+=("--force"); fi
+          node tools/fetch.mjs "${args[@]}"
+      - name: Prepare missing Eastern-day snapshot emails
+        if: ${{ !cancelled() && (steps.capture.outcome == 'success' || steps.capture.outcome == 'failure') }}
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL_FROM: ${{ secrets.ALERT_EMAIL_FROM }}
+          ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
+        run: node tools/alert-reveal.mjs --prepare-only
+      - name: Generate fourteen-day status even after capture failure
+        if: ${{ !cancelled() && (steps.capture.outcome == 'success' || steps.capture.outcome == 'failure') }}
+        run: node tools/build-status.mjs
       - name: Persist snapshots before attempting the page build
         id: persist
         if: ${{ !cancelled() && (steps.capture.outcome == 'success' || steps.capture.outcome == 'failure') }}
         run: |
-          git add -A -- design/phase-one
+          git add -A -- design/phase-one status
           git diff --cached --quiet || git commit -m "chore: save official Krillion answer record"
+          git pull --rebase origin main
+          git push origin HEAD:main
+      - name: Send durable prepared email alerts
+        if: ${{ !cancelled() && steps.persist.outcome == 'success' }}
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL_FROM: ${{ secrets.ALERT_EMAIL_FROM }}
+          ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
+        run: node tools/alert-reveal.mjs
+      - name: Persist email acknowledgments even after provider failure
+        if: ${{ !cancelled() && steps.persist.outcome == 'success' }}
+        run: |
+          git add -A -- design/phase-one
+          git diff --cached --quiet || git commit -m "chore: save snapshot email delivery state"
           git pull --rebase origin main
           git push origin HEAD:main
       - name: Build guide from saved records
@@ -95,8 +128,8 @@ jobs:
           git diff --cached --quiet || git commit -m "chore: record Krillion deployment status"
           git pull --rebase origin main
           git push origin HEAD:main
-      - name: Notify WeChat on any failure
-        if: ${{ failure() }}
+      - name: Notify WeChat on infrastructure or publishing failure
+        if: ${{ failure() && (steps.checks.outcome == 'failure' || steps.persist.outcome == 'failure' || steps.build.outcome == 'failure' || steps.publish.outcome == 'failure' || steps.verify.outcome == 'failure') }}
         env:
           WECHAT_WEBHOOK: ${{ secrets.WECHAT_WEBHOOK }}
           REVEAL_FAILURE_STAGE: ${{ steps.checks.outcome == 'failure' && 'tests' || steps.capture.outcome == 'failure' && 'capture' || steps.persist.outcome == 'failure' && 'save-snapshot' || steps.build.outcome == 'failure' && 'build' || steps.publish.outcome == 'failure' && 'push-pages' || steps.verify.outcome == 'failure' && 'verify-deployment' || 'setup-or-status' }}

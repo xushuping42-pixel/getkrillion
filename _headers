@@ -15,3 +15,7 @@
 /release.json
   Cache-Control: no-cache
   X-Robots-Tag: noindex
+
+/status/*
+  Cache-Control: no-cache
+  X-Robots-Tag: noindex, follow

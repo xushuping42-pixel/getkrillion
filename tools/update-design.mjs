@@ -12,7 +12,7 @@ const report = { targetDate: easternDate(), runAt: new Date().toISOString(), cap
 if (process.env.REVEAL_NOTIFICATION_CONFIGURED === 'true') report.notification = 'configured';
 if (mode === '--build-only' && fs.existsSync(statusFile)) {
   const previous = JSON.parse(fs.readFileSync(statusFile, 'utf8'));
-  if (previous.targetDate !== report.targetDate) throw new Error('Capture report belongs to a different Eastern date; start a new capture run');
+  if (previous.targetDate !== report.targetDate && previous.backfill !== true) throw new Error('Capture report belongs to a different Eastern date; start a new capture run');
   Object.assign(report, previous);
 }
 function save() {

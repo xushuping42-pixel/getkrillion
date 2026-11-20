@@ -1,14 +1,27 @@
 {
-  "targetDate": "2026-11-19",
-  "runAt": "2026-11-19T13:19:53.423Z",
+  "targetDate": "2026-11-20",
+  "runAt": "2026-11-20T05:19:56.043Z",
+  "httpStatus": null,
+  "promptCount": 7,
+  "answerCounts": [
+    24,
+    28808,
+    538,
+    3504,
+    653,
+    16757,
+    3791
+  ],
+  "lastSuccessfulDate": "2026-11-20",
+  "validationStep": "complete",
   "capture": "already-recorded",
   "validation": "passed",
-  "build": "passed",
-  "deployment": "passed",
-  "notification": "configured",
-  "schedule": "enabled",
-  "date": "2026-11-19",
-  "fetchedAt": "2026-11-19T06:04:16.190Z",
+  "fetchedAt": "2026-11-20T05:14:00.899Z",
   "prompts": 7,
-  "answers": 58487
+  "answers": 54075,
+  "backfill": false,
+  "build": "not-run",
+  "deployment": "not-configured",
+  "notification": "not-configured",
+  "schedule": "not-enabled"
 }
