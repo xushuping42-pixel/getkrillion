@@ -1,6 +1,6 @@
 {
   "targetDate": "2026-11-20",
-  "runAt": "2026-11-20T05:19:56.043Z",
+  "runAt": "2026-11-20T05:21:09.738Z",
   "httpStatus": null,
   "promptCount": 7,
   "answerCounts": [
@@ -23,5 +23,5 @@
   "build": "not-run",
   "deployment": "not-configured",
   "notification": "not-configured",
-  "schedule": "not-enabled"
+  "schedule": "enabled"
 }
