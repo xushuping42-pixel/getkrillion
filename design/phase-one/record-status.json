@@ -1,6 +1,12 @@
 {
   "targetDate": "2026-11-21",
   "runAt": "2026-11-21T12:35:52.470Z",
+  "capture": "saved",
+  "validation": "passed",
+  "build": "passed",
+  "deployment": "not-configured",
+  "notification": "not-configured",
+  "schedule": "enabled",
   "httpStatus": 200,
   "promptCount": 7,
   "answerCounts": [
@@ -15,14 +21,8 @@
   "lastSuccessfulDate": "2026-11-20",
   "validationStep": "complete",
   "rawResponsePrefix": "{\"date\":\"2026-11-21\",\"prompts\":[{\"id\":\"p1\",\"text\":\"Name the capital city of any country\",\"answers\":[{\"answer\":\"Ngerulmud\",\"aliases\":[\"melekeok\",\"Ngerulmud Palau\",\"Ngerelmud\",\"ngermuld\",\"ngerlumund\",\"ngulmud\",\"ngermulund\",\"ngelrmud\",\"ngurmuld\",\"ngrlumund\",\"mgermud\",\"nerglemud\",\"ngebudmul\",\"ngrulemu\",\"nerdhulmud\",\"neuralmud\",\"ngelmurlurd\",\"namekeok\",\"ngerulmudngerulmud\",\"ngerlud\",\"ngeruluma\",\"ngernud\",\"ngerumland\",\"ngumerlnd\",\"nguermland\",\"ngerlund\",\"ngermuland\",\"ngermul\",\"nglermund\",\"ngerlumand\",",
-  "capture": "saved",
-  "validation": "passed",
   "fetchedAt": "2026-11-21T12:35:52.470Z",
   "prompts": 7,
   "answers": 47471,
-  "backfill": false,
-  "build": "not-run",
-  "deployment": "not-configured",
-  "notification": "not-configured",
-  "schedule": "enabled"
+  "backfill": false
 }
