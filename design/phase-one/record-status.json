@@ -1,13 +1,7 @@
 {
   "targetDate": "2026-11-21",
-  "runAt": "2026-11-21T12:35:52.470Z",
-  "capture": "saved",
-  "validation": "passed",
-  "build": "passed",
-  "deployment": "failed",
-  "notification": "not-configured",
-  "schedule": "enabled",
-  "httpStatus": 200,
+  "runAt": "2026-11-21T20:04:34.337Z",
+  "httpStatus": null,
   "promptCount": 7,
   "answerCounts": [
     217,
@@ -18,11 +12,16 @@
     1422,
     709
   ],
-  "lastSuccessfulDate": "2026-11-20",
+  "lastSuccessfulDate": "2026-11-21",
   "validationStep": "complete",
-  "rawResponsePrefix": "{\"date\":\"2026-11-21\",\"prompts\":[{\"id\":\"p1\",\"text\":\"Name the capital city of any country\",\"answers\":[{\"answer\":\"Ngerulmud\",\"aliases\":[\"melekeok\",\"Ngerulmud Palau\",\"Ngerelmud\",\"ngermuld\",\"ngerlumund\",\"ngulmud\",\"ngermulund\",\"ngelrmud\",\"ngurmuld\",\"ngrlumund\",\"mgermud\",\"nerglemud\",\"ngebudmul\",\"ngrulemu\",\"nerdhulmud\",\"neuralmud\",\"ngelmurlurd\",\"namekeok\",\"ngerulmudngerulmud\",\"ngerlud\",\"ngeruluma\",\"ngernud\",\"ngerumland\",\"ngumerlnd\",\"nguermland\",\"ngerlund\",\"ngermuland\",\"ngermul\",\"nglermund\",\"ngerlumand\",",
+  "capture": "already-recorded",
+  "validation": "passed",
   "fetchedAt": "2026-11-21T12:35:52.470Z",
   "prompts": 7,
   "answers": 47471,
-  "backfill": false
+  "backfill": false,
+  "build": "not-run",
+  "deployment": "not-configured",
+  "notification": "not-configured",
+  "schedule": "enabled"
 }
