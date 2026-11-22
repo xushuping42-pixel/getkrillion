@@ -1,6 +1,12 @@
 {
   "targetDate": "2026-11-21",
   "runAt": "2026-11-22T00:19:01.910Z",
+  "capture": "already-recorded",
+  "validation": "passed",
+  "build": "passed",
+  "deployment": "not-configured",
+  "notification": "not-configured",
+  "schedule": "enabled",
   "httpStatus": null,
   "promptCount": 7,
   "answerCounts": [
@@ -14,14 +20,8 @@
   ],
   "lastSuccessfulDate": "2026-11-21",
   "validationStep": "complete",
-  "capture": "already-recorded",
-  "validation": "passed",
   "fetchedAt": "2026-11-21T12:35:52.470Z",
   "prompts": 7,
   "answers": 47471,
-  "backfill": false,
-  "build": "not-run",
-  "deployment": "not-configured",
-  "notification": "not-configured",
-  "schedule": "enabled"
+  "backfill": false
 }
