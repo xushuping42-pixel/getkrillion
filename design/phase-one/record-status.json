@@ -1,13 +1,7 @@
 {
   "targetDate": "2026-11-22",
-  "runAt": "2026-11-22T07:58:11.642Z",
-  "capture": "saved",
-  "validation": "passed",
-  "build": "passed",
-  "deployment": "passed",
-  "notification": "not-configured",
-  "schedule": "enabled",
-  "httpStatus": 200,
+  "runAt": "2026-11-22T16:14:24.991Z",
+  "httpStatus": null,
   "promptCount": 7,
   "answerCounts": [
     7927,
@@ -18,11 +12,16 @@
     10013,
     383
   ],
-  "lastSuccessfulDate": "2026-11-21",
+  "lastSuccessfulDate": "2026-11-22",
   "validationStep": "complete",
-  "rawResponsePrefix": "{\"date\":\"2026-11-22\",\"prompts\":[{\"id\":\"p1\",\"text\":\"Name a car brand\",\"answers\":[{\"answer\":\"Sears\",\"aliases\":[\"Sears Motor Buggy\",\"Sears vehicles\",\"Sears Motor Car\",\"Sears Roebuck\",\"sears sears\",\"seaerss\"],\"tier\":\"krillion\",\"score\":100,\"quip\":\"Sears once sold a car by mail through its catalog.\"},{\"answer\":\"212\",\"aliases\":[\"BAIC 212\",\"Beijing 212 T01\",\"212 T01\",\"212 Off-Road\"],\"tier\":\"deepcut\",\"score\":85},{\"answer\":\"2Rike\",\"tier\":\"deepcut\",\"score\":85},{\"answer\":\"9ff\",\"aliases\":[\"GT9\",\"GT9-R\",\"GT9 ",
+  "capture": "already-recorded",
+  "validation": "passed",
   "fetchedAt": "2026-11-22T07:58:11.642Z",
   "prompts": 7,
   "answers": 54670,
-  "backfill": false
+  "backfill": false,
+  "build": "not-run",
+  "deployment": "not-configured",
+  "notification": "not-configured",
+  "schedule": "enabled"
 }
