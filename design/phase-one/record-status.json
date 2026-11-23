@@ -1,6 +1,12 @@
 {
   "targetDate": "2026-11-23",
   "runAt": "2026-11-23T12:26:45.706Z",
+  "capture": "saved",
+  "validation": "passed",
+  "build": "passed",
+  "deployment": "not-configured",
+  "notification": "not-configured",
+  "schedule": "enabled",
   "httpStatus": 200,
   "promptCount": 7,
   "answerCounts": [
@@ -15,14 +21,8 @@
   "lastSuccessfulDate": "2026-11-22",
   "validationStep": "complete",
   "rawResponsePrefix": "{\"date\":\"2026-11-23\",\"prompts\":[{\"id\":\"p1\",\"text\":\"Name an animal that eats fish (documented, regular part of its diet)\",\"answers\":[{\"answer\":\"Black swallower\",\"aliases\":[\"Chiasmodon niger\",\"blakc swallowed\",\"black slowwer\",\"black swoller\",\"black swallower fish\"],\"tier\":\"krillion\",\"score\":100,\"quip\":\"Its stomach stretches around fish longer than its whole body.\"},{\"answer\":\"Aatotomus\",\"aliases\":[\"aatotomus placochton\"],\"tier\":\"deepcut\",\"score\":85},{\"answer\":\"Aba aba\",\"aliases\":[\"aba\",\"frankfish\"",
-  "capture": "saved",
-  "validation": "passed",
   "fetchedAt": "2026-11-23T12:26:45.706Z",
   "prompts": 7,
   "answers": 44139,
-  "backfill": false,
-  "build": "not-run",
-  "deployment": "not-configured",
-  "notification": "not-configured",
-  "schedule": "enabled"
+  "backfill": false
 }
