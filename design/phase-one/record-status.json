@@ -1,12 +1,6 @@
 {
   "targetDate": "2026-11-24",
-  "runAt": "2026-11-24T10:54:04.782Z",
-  "capture": "failed",
-  "validation": "not-passed",
-  "build": "passed",
-  "deployment": "passed",
-  "notification": "not-configured",
-  "schedule": "enabled",
+  "runAt": "2026-11-24T21:09:48.387Z",
   "httpStatus": 200,
   "promptCount": 7,
   "answerCounts": [
@@ -21,6 +15,12 @@
   "lastSuccessfulDate": "2026-11-23",
   "validationStep": "answer-total",
   "rawResponsePrefix": "{\"date\":\"2026-11-24\",\"prompts\":[{\"id\":\"p1\",\"text\":\"Name a sport where you're allowed to kick the ball\",\"answers\":[{\"answer\":\"Eton wall game\",\"aliases\":[\"Eton College wall game\",\"Eton wall\",\"the wall game\",\"wall game\",\"wall game eton\",\"eton wall ball\",\"eton wall gane\",\"eton wallball\",\"eaten wall game\",\"elon wall\",\"st andrews wall game\",\"eton wall sport\"],\"tier\":\"krillion\",\"score\":100,\"quip\":\"Its St Andrew's Day match hasn't seen a goal since 1909.\"},{\"answer\":\"3 balones a la caja\",\"tier\":\"deepcut",
+  "capture": "failed",
+  "validation": "not-passed",
   "error": "Answer total differs from previous edition by more than 90%",
-  "backfill": false
+  "backfill": false,
+  "build": "not-run",
+  "deployment": "not-configured",
+  "notification": "not-configured",
+  "schedule": "enabled"
 }
