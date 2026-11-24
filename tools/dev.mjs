@@ -12,7 +12,7 @@ http.createServer((req,res)=>{
   if (pathname==='/answers' || pathname==='/answers/') {res.writeHead(301,{Location:'/archive/'});return res.end();}
   const relative=pathname.replace(/^\/+/, '') || 'index.html';
   const file=path.resolve(base,relative,relative.endsWith('/')?'index.html':'');
-  if (!file.startsWith(base+path.sep) || relative.split(/[\\/]/).some(x=>x.startsWith('.')) || !/^(index\.html$|404\.html$|hints\/|archive\/|how-to-play\/|scoring\/|score-calculator\/|why-answer-not-accepted\/|search\/|about\/|privacy\/|answers\/|assets\/guide\/|release\.json$|sitemap\.xml$|robots\.txt$|favicon\.svg$)/.test(relative)) {res.writeHead(404);return res.end('Not found');}
+  if (!file.startsWith(base+path.sep) || relative.split(/[\\/]/).some(x=>x.startsWith('.')) || !/^(index\.html$|404\.html$|krillion-(?:unlimited|multiplayer|minecraft|roblox)\/|hints\/|archive\/|how-to-play\/|scoring\/|score-calculator\/|why-answer-not-accepted\/|search\/|about\/|privacy\/|answers\/|assets\/guide\/|release\.json$|sitemap\.xml$|robots\.txt$|favicon\.svg$)/.test(relative)) {res.writeHead(404);return res.end('Not found');}
   if (fs.existsSync(file) && fs.statSync(file).isDirectory()) {res.writeHead(301,{Location:pathname+'/'});return res.end();}
   const found=fs.existsSync(file) && fs.statSync(file).isFile();
   const actual=found?file:path.join(base,'404.html');

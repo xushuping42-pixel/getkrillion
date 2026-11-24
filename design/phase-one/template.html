@@ -7,9 +7,7 @@
   <meta name="theme-color" content="#101c19">
   <title>{{PAGE_TITLE}}</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./style.css">
-  <link rel="stylesheet" href="./phase-two.css">
-  <link rel="stylesheet" href="./phase-three.css">
+  <link rel="stylesheet" href="./app.css">
   <script src="./app.js" type="module"></script>
 </head>
 <body data-day="{{DAY}}" data-snapshot="{{SNAPSHOT_FILE}}" data-archive="{{ARCHIVED}}">
@@ -22,7 +20,7 @@
 </header>
 <main class="container">
   <section class="hero" aria-labelledby="page-title">
-    <div class="hero-copy"><p class="eyebrow"><span class="status-dot"></span> FOR THE CURIOUS. EVERY DAY.</p><h1 id="page-title" class="edition-heading">{{PAGE_HEADING}}</h1><p class="hero-description">A little hint. A great aha.<br>Seven prompts. Reveal only as much as you need.</p><div class="hero-actions"><a class="button button-primary" href="#daily-prompts">Explore the seven prompts <span aria-hidden="true">↓</span></a><a class="quiet-link" href="#how-it-works">Keep the discovery yours <span aria-hidden="true">↗</span></a></div><p class="hero-footnote">A small daily discovery is a good place to start.</p></div>
+    <div class="hero-copy"><p class="eyebrow"><span class="status-dot"></span> FOR THE CURIOUS. EVERY DAY.</p><h1 id="page-title" class="edition-heading">{{PAGE_HEADING}}</h1><p class="hero-description">A little hint. A great aha.<span class="description-more"><br>Seven prompts. Reveal only as much as you need.</span></p><div class="hero-actions"><a class="button button-primary" href="#daily-prompts"><span class="desktop-only">Explore the seven prompts ↓</span><span class="mobile-only">Jump to today's seven prompts ↓</span></a><a class="quiet-link" href="#how-it-works">Keep the discovery yours <span aria-hidden="true">↗</span></a></div><p class="hero-footnote">A small daily discovery is a good place to start.</p></div>
     <div class="hero-art" aria-hidden="true">
       <span class="art-caption">FIELD STUDY No. 007</span>
       <svg class="discovery-map" viewBox="0 0 420 330" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -41,6 +39,8 @@
     </div>
   </section>
   <section class="daily-status" aria-label="Round date and data status">
+    <p class="status-chip mobile-only">{{DATE}} · 7/7 ready · {{ANSWER_COUNT}} answers</p>
+    <details class="status-mobile-countdown mobile-only"><summary>Next Eastern midnight</summary><div><strong data-mobile-countdown role="timer" aria-live="off">At midnight Eastern</strong><span>The next reveal may be available later.</span></div></details>
     <div class="status-date"><span class="micro">THE DAILY ANSWER EDITION</span><strong>{{DATE}}</strong><span>America/New_York</span></div>
     <div class="status-availability"><span class="micro">{{DATE_STATUS}}</span><strong><span class="status-dot"></span> All seven prompts ready</strong><span>{{ANSWER_COUNT}} recorded answers · official scores</span></div>
     <div class="status-countdown"><span class="micro">NEXT EASTERN MIDNIGHT</span><strong id="countdown" role="timer" aria-live="off">At midnight Eastern</strong><span>The next reveal may be available later.</span></div>

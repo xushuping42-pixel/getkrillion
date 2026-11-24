@@ -24,7 +24,7 @@ try {
     if (Date.now() < limit) await delay(Number(process.env.GUIDE_VERIFY_INTERVAL || 15000));
   } while (Date.now() < limit);
   if (!ready) throw new Error('Cloudflare did not publish the expected guide release before the verification deadline');
-  for (const path of ['/', '/hints/', '/archive/', '/how-to-play/', '/scoring/', '/score-calculator/', '/why-answer-not-accepted/', `/answers/${expected.latestDate}/`, `/answers/${expected.latestDate}/prompt-1/`]) {
+  for (const path of ['/', '/krillion-unlimited/', '/krillion-multiplayer/', '/krillion-minecraft/', '/krillion-roblox/', '/hints/', '/archive/', '/how-to-play/', '/scoring/', '/score-calculator/', '/why-answer-not-accepted/', `/answers/${expected.latestDate}/`, `/answers/${expected.latestDate}/prompt-1/`]) {
     const { response, text } = await read(path);
     if (!response.ok || /<meta name="robots" content="[^"]*noindex/.test(text) || response.headers.get('x-robots-tag')?.includes('noindex') || !text.includes(`rel="canonical" href="https://getkrillion.xyz${path}"`)) throw new Error('Indexable page verification failed: ' + path);
   }

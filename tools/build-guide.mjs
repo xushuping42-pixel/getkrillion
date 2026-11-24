@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { easternDate } from '../design/phase-one/date-core.mjs';
 import { editionSeo } from './design-seo.mjs';
 import { renderStatus } from './build-status.mjs';
+import { modeGuides, renderModeGuide } from './mode-guides.mjs';
 import { tierLabel } from '../design/phase-one/search-core.mjs';
 
 await import('./build-design.mjs');
@@ -20,7 +21,7 @@ const publicEditions = editions.map(e => ({ ...e, file: `/assets/guide/records/$
 const routes = { 'index.html': '/', 'hints.html': '/hints/', 'archive.html': '/archive/', 'guide.html': '/how-to-play/', 'scoring.html': '/scoring/', 'missing-answer.html': '/why-answer-not-accepted/', 'search.html': '/search/' };
 routes[''] = '/';
 for (const e of editions) routes[`edition-${e.date}.html`] = `/answers/${e.date}/`;
-const assets = ['style.css', 'phase-two.css', 'phase-three.css', 'app.js', 'utilities.js', 'phase-three.js', 'answer-ui.mjs', 'copy-tools.mjs', 'search-core.mjs', 'date-core.mjs', 'question.js', 'site.js'];
+const assets = ['app.css', 'app.js', 'utilities.js', 'phase-three.js', 'answer-ui.mjs', 'copy-tools.mjs', 'search-core.mjs', 'date-core.mjs', 'question.js', 'site.js'];
 const version = createHash('sha256').update(assets.map(name => fs.readFileSync(path.join(source, name))).reduce((a, b) => Buffer.concat([a, b]), Buffer.alloc(0))).digest('hex').slice(0, 12);
 const output = new Map();
 const pages = [];
@@ -88,7 +89,7 @@ function dailyLinks(html, edition) {
   let index = 0;
   return html.replace(/<a class="all-answers"[^>]*data-dialog="answers-\d+"[^>]*>/g, () => `<a class="all-answers" href="/answers/${edition.date}/prompt-${++index}/">`);
 }
-publish('index.html', { url: '/', ...editionSeo(latest.date, today, { home: true }), description: `Explore all seven Krillion prompts for ${latest.label}, with progressive hints, rare answer examples, recorded scores and searchable answer lists.` }, html => dailyLinks(html, latest));
+publish('index.html', { url: '/', ...editionSeo(latest.date, today, { home: true }), description: `Explore all seven Krillion prompts for ${latest.label}, with progressive hints, rare answer examples, recorded scores and searchable answer lists.` }, html => dailyLinks(html, latest).replace('<section class="continue-section">', '<p class="mode-entry">Want to keep playing? <a href="/krillion-unlimited/">Explore Krillion Unlimited and other ways to play →</a></p><section class="continue-section">'));
 for (const e of editions) {
   const seo = editionSeo(e.date, today);
   publish(`edition-${e.date}.html`, { url: `/answers/${e.date}/`, title: seo.title, description: `Krillion answers for ${e.label}: seven prompts, first-letter hints, rare examples and ${e.answerCount.toLocaleString('en-US')} recorded answers with scores.`, initialLastmod: e.date, breadcrumbs: [{ name: 'Answer archive', item: site + '/archive/' }] }, html => dailyLinks(html, e));
@@ -104,6 +105,9 @@ const metadata = [
 for (const [file, url, title, description, index = true] of metadata) {
   const text = fs.readFileSync(path.join(source, file), 'utf8');
   publish(file, { url, title: title || plain(text.match(/<title>(.*?)<\/title>/s)[1]), description, index });
+}
+for (const guide of modeGuides) {
+  publish('guide.html', { url: '/' + guide.slug + '/', title: guide.title, description: guide.description }, html => main(html, renderModeGuide(guide)).replace('<script src="./utilities.js" type="module"></script>', ''));
 }
 const scoring = fs.readFileSync(path.join(source, 'scoring.html'), 'utf8');
 const planner = scoring.match(/<section id="score-plan">[\s\S]*?<\/section>/)?.[0];
@@ -154,7 +158,7 @@ output.set('sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns
 output.set('robots.txt', `User-agent: *\nAllow: /\nDisallow: /data/\nDisallow: /tools/\nDisallow: /tests/\nSitemap: ${site}/sitemap.xml\n`);
 output.set('_redirects', '/answers /archive/ 301\n/answers/ /archive/ 301\n');
 output.set('_headers', '/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n\n/assets/*\n  Cache-Control: public, max-age=0, must-revalidate\n  X-Robots-Tag: noindex\n\n/design/*\n  X-Robots-Tag: noindex, nofollow\n\n/search/*\n  X-Robots-Tag: noindex, follow\n\n/release.json\n  Cache-Control: no-cache\n  X-Robots-Tag: noindex\n');
-output.set('404.html', '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Page Not Found — Krillion Fieldnotes</title><link rel="stylesheet" href="/assets/guide/style.css"></head><body><main class="container utility-page"><h1>That edition is not in our records.</h1><p>We only publish complete recorded rounds. Future and unavailable dates have no answer page.</p><p><a href="/">Latest recorded answers →</a> · <a href="/archive/">Browse the archive →</a></p></main></body></html>');
+output.set('404.html', '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Page Not Found — Krillion Fieldnotes</title><link rel="stylesheet" href="/assets/guide/app.css"></head><body><main class="container utility-page"><h1>That edition is not in our records.</h1><p>We only publish complete recorded rounds. Future and unavailable dates have no answer page.</p><p><a href="/">Latest recorded answers →</a> · <a href="/archive/">Browse the archive →</a></p></main></body></html>');
 output.set('_headers', output.get('_headers') + '\n/status/*\n  Cache-Control: no-cache\n  X-Robots-Tag: noindex, follow\n');
 output.set('status/index.html', renderStatus({ root }));
 const hash = createHash('sha256');

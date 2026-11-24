@@ -35,13 +35,13 @@ const cards = prompts.map((p, i) => {
   const shape = words.map(word => [...word].map((c, j) => j === 0 || !/[\p{L}\p{N}]/u.test(c) ? c.toUpperCase() : '·').join('')).join(' ');
   return `<article class="prompt-card" id="prompt-${i + 1}">
   <div class="card-top"><span class="category">Daily discovery</span><button class="review-toggle" type="button" data-review="${i + 1}" aria-pressed="false" aria-label="Mark prompt ${i + 1} as reviewed"><span aria-hidden="true">✓</span></button></div>
-  <div class="prompt-heading"><span class="prompt-number">${String(i + 1).padStart(2, '0')}</span><div><p class="micro">PROMPT ${i + 1} OF 7</p><h3>${esc(p.text)}</h3></div></div>
+  <div class="prompt-heading"><span class="prompt-number">${String(i + 1).padStart(2, '0')}</span><div><p class="micro">PROMPT ${i + 1} OF 7</p><h3><span class="desktop-prompt-title">${esc(p.text)}</span><button class="prompt-expand" type="button" aria-expanded="false" aria-controls="prompt-hints-${i + 1}" aria-label="Show hints for prompt ${i + 1}: ${esc(p.text)}"><span>${esc(p.text)}</span><span aria-hidden="true">+</span></button></h3></div></div>
   <p class="answer-count">${p.answers.length.toLocaleString('en-US')} recorded answers <span aria-hidden="true">·</span> Official scores preserved</p>
-  <div class="hint-stack">
+  <div class="hint-stack"><div id="prompt-hints-${i + 1}">
     <details><summary><span><span class="hint-icon" aria-hidden="true">✧</span> A gentle nudge</span><span class="expand" aria-hidden="true">+</span></summary><div class="hint-content">One recorded example starts with <strong>“${esc([...answer][0].toUpperCase())}”</strong>.</div></details>
     <details><summary><span><span class="hint-icon" aria-hidden="true">✧</span> A little more help</span><span class="expand" aria-hidden="true">+</span></summary><div class="hint-content"><p>${words.length} ${words.length === 1 ? 'word' : 'words'} · ${[...answer.replace(/\s/g, '')].length} characters without spaces</p><p class="word-shape">${esc(shape)}</p></div></details>
     <details class="reveal"><summary><span>Ready for one answer?</span><span class="expand" aria-hidden="true">↗</span></summary><div class="hint-content answer-example"><div><span class="micro">${featured.score} POINTS · ${esc(tierLabel(featured.tier))}</span><strong>${esc(answer)}</strong></div><button type="button" class="copy-button" data-copy="${esc(answer)}">Copy <span aria-hidden="true">⧉</span></button></div>${noteHtml}</details>
-  </div>
+  </div></div>
   <a class="all-answers" href="${esc(snapshot.source)}" data-dialog="answers-${i + 1}" aria-haspopup="dialog">Explore ${p.answers.length.toLocaleString('en-US')} answers <span aria-hidden="true">↗</span></a>
 </article>`;
 }).join('\n');
@@ -67,6 +67,7 @@ function renderEdition(home) {
   let html = template;
   for (const [key, value] of Object.entries({ ...tokens, PAGE_TITLE: esc(seo.title), PAGE_HEADING: esc(seo.heading) })) html = html.replaceAll('{{' + key + '}}', String(value));
   if (!home) html = html.replace('data-archive="false"', 'data-archive="true"');
+  if (!home || day !== today) html = html.replace("Jump to today's seven prompts ↓", "Jump to this edition's seven prompts ↓");
   if (!home || tokens.ARCHIVED === 'true') html = html.replace('class="active" href="./#daily-prompts" aria-current="page"', 'href="./#daily-prompts"');
   if (/\{\{[A-Z_]+\}\}/.test(html)) throw new Error('Unresolved design token');
   return html;

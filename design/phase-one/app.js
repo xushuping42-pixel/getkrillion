@@ -5,6 +5,19 @@ import { appendAnswerRows } from './answer-ui.mjs';
 (() => {
   installCopy();
   const day = document.body.dataset.day;
+  const compact = matchMedia('(max-width:720px)');
+  for (const button of document.querySelectorAll('.prompt-expand')) {
+    const card = button.closest('.prompt-card');
+    const label = 'hints for prompt ' + card.id.slice(7) + ': ' + card.querySelector('.desktop-prompt-title').textContent;
+    function setExpanded(expanded) {
+      card.classList.toggle('is-expanded', expanded);
+      button.setAttribute('aria-expanded', String(expanded));
+      button.setAttribute('aria-label', (expanded ? 'Hide ' : 'Show ') + label);
+      button.lastElementChild.textContent = expanded ? '−' : '+';
+    }
+    button.addEventListener('click', () => setExpanded(!card.classList.contains('is-expanded')));
+    compact.addEventListener('change', () => setExpanded(false));
+  }
   const storageKey = 'krillion_design_official_reviewed_' + day;
   let reviewed = new Set();
   try {
@@ -96,9 +109,10 @@ import { appendAnswerRows } from './answer-ui.mjs';
     filterForm.elements.score.addEventListener('change', () => renderList(true));
     filterForm.addEventListener('reset', () => setTimeout(() => renderList(true), 0));
   }
-  const easternDay = time => new Intl.DateTimeFormat('en-CA', {
+  const easternFormatter = new Intl.DateTimeFormat('en-CA', {
     timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit'
-  }).format(new Date(time));
+  });
+  const easternDay = time => easternFormatter.format(new Date(time));
   const now = Date.now(), initialDay = easternDay(now);
   if (initialDay !== day && document.body.dataset.archive !== 'true') {
     document.title = document.title.replace('Krillion Answers Today', 'Latest Recorded Krillion Answers');
@@ -116,15 +130,17 @@ import { appendAnswerRows } from './answer-ui.mjs';
   let countdownTimer;
   function tick() {
     const remaining = Math.max(0, Math.ceil((unlockAt - Date.now()) / 1000));
-    const node = document.querySelector('#countdown');
-    if (!remaining) {
-      node.textContent = 'A new day has started';
-      node.nextElementSibling.textContent = 'Refresh to check the latest available edition.';
-      clearInterval(countdownTimer);
-      return;
+    const nodes = document.querySelectorAll('#countdown, [data-mobile-countdown]');
+    for (const node of nodes) {
+      if (!remaining) {
+        node.textContent = 'A new day has started';
+        node.nextElementSibling.textContent = 'Refresh to check the latest available edition.';
+        clearInterval(countdownTimer);
+        continue;
+      }
+      node.textContent = [Math.floor(remaining / 3600), Math.floor(remaining / 60) % 60, remaining % 60]
+        .map(n => String(n).padStart(2, '0')).join(' : ');
     }
-    node.textContent = [Math.floor(remaining / 3600), Math.floor(remaining / 60) % 60, remaining % 60]
-      .map(n => String(n).padStart(2, '0')).join(' : ');
   }
   tick();
   countdownTimer = setInterval(tick, 1000);
