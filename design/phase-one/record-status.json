@@ -1,6 +1,6 @@
 {
-  "targetDate": "2026-11-20",
-  "runAt": "2026-11-20T05:29:10.042Z",
+  "targetDate": "2026-11-23",
+  "runAt": "2026-11-24T00:48:54.850Z",
   "capture": "already-recorded",
   "validation": "passed",
   "build": "passed",
@@ -10,18 +10,18 @@
   "httpStatus": null,
   "promptCount": 7,
   "answerCounts": [
-    24,
-    28808,
-    538,
-    3504,
-    653,
-    16757,
-    3791
+    10618,
+    5906,
+    14,
+    23759,
+    1111,
+    1706,
+    1025
   ],
-  "lastSuccessfulDate": "2026-11-20",
+  "lastSuccessfulDate": "2026-11-23",
   "validationStep": "complete",
-  "fetchedAt": "2026-11-20T05:14:00.899Z",
+  "fetchedAt": "2026-11-23T12:26:45.706Z",
   "prompts": 7,
-  "answers": 54075,
+  "answers": 44139,
   "backfill": false
 }
