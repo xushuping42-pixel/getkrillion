@@ -4,7 +4,7 @@
   "capture": "failed",
   "validation": "not-passed",
   "build": "passed",
-  "deployment": "not-configured",
+  "deployment": "passed",
   "notification": "not-configured",
   "schedule": "enabled",
   "httpStatus": 200,
