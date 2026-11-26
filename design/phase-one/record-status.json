@@ -1,26 +1,26 @@
 {
-  "targetDate": "2026-11-25",
-  "runAt": "2026-11-26T04:59:22.244Z",
-  "capture": "failed",
-  "validation": "not-passed",
-  "build": "passed",
-  "deployment": "passed",
-  "notification": "not-configured",
-  "schedule": "enabled",
+  "targetDate": "2026-11-26",
+  "runAt": "2026-11-26T15:08:26.235Z",
   "httpStatus": 200,
   "promptCount": 7,
   "answerCounts": [
-    8763,
-    8500,
-    15970,
-    16751,
-    579,
-    136008,
-    1143
+    118164,
+    6485,
+    1588,
+    51,
+    3883,
+    16742,
+    427
   ],
   "lastSuccessfulDate": "2026-11-23",
   "validationStep": "answer-total",
-  "rawResponsePrefix": "{\"date\":\"2026-11-25\",\"prompts\":[{\"id\":\"p1\",\"text\":\"Name a horror movie (1,000+ votes on IMDb)\",\"answers\":[{\"answer\":\"Blood Freak\",\"aliases\":[\"Blood Freaks\",\"blood freek\"],\"tier\":\"krillion\",\"score\":100,\"quip\":\"Its hero eats lab-tested turkey and hallucinates having a turkey head.\"},{\"answer\":\".com for Murder\",\"aliases\":[\"dot com for murder\"],\"tier\":\"deepcut\",\"score\":85},{\"answer\":\"[REC] 3: Genesis\",\"aliases\":[\"[REC] III: Genesis\",\"[REC] Three: Genesis\",\"[REC] III\",\"[REC] Three\",\"Rec Genesis\",\"REC",
+  "rawResponsePrefix": "{\"date\":\"2026-11-26\",\"prompts\":[{\"id\":\"p1\",\"text\":\"Name a magazine\",\"answers\":[{\"answer\":\"Popular Electronics\",\"aliases\":[\"Popular Electronics Magazine\",\"Computers & Electronics Magazine\",\"Popyuraerekutoronikusu\",\"Popyurāerekutoronikusu\",\"Popyuraaerekutoronikusu\",\"Popular Electronics Magazin\"],\"tier\":\"krillion\",\"score\":100,\"quip\":\"Its January 1975 Altair cover inspired Gates and Allen to found Microsoft.\"},{\"answer\":\"-ette review\",\"aliases\":[\"-ette\"],\"tier\":\"deepcut\",\"score\":85},{\"answer\":\";logi",
+  "capture": "failed",
+  "validation": "not-passed",
   "error": "Answer total differs from previous edition by more than 90%",
-  "backfill": false
+  "backfill": false,
+  "build": "not-run",
+  "deployment": "not-configured",
+  "notification": "not-configured",
+  "schedule": "enabled"
 }
