@@ -1,12 +1,6 @@
 {
   "targetDate": "2026-11-25",
-  "runAt": "2026-11-25T23:07:30.756Z",
-  "capture": "failed",
-  "validation": "not-passed",
-  "build": "passed",
-  "deployment": "passed",
-  "notification": "not-configured",
-  "schedule": "enabled",
+  "runAt": "2026-11-26T04:59:22.244Z",
   "httpStatus": 200,
   "promptCount": 7,
   "answerCounts": [
@@ -21,6 +15,12 @@
   "lastSuccessfulDate": "2026-11-23",
   "validationStep": "answer-total",
   "rawResponsePrefix": "{\"date\":\"2026-11-25\",\"prompts\":[{\"id\":\"p1\",\"text\":\"Name a horror movie (1,000+ votes on IMDb)\",\"answers\":[{\"answer\":\"Blood Freak\",\"aliases\":[\"Blood Freaks\",\"blood freek\"],\"tier\":\"krillion\",\"score\":100,\"quip\":\"Its hero eats lab-tested turkey and hallucinates having a turkey head.\"},{\"answer\":\".com for Murder\",\"aliases\":[\"dot com for murder\"],\"tier\":\"deepcut\",\"score\":85},{\"answer\":\"[REC] 3: Genesis\",\"aliases\":[\"[REC] III: Genesis\",\"[REC] Three: Genesis\",\"[REC] III\",\"[REC] Three\",\"Rec Genesis\",\"REC",
+  "capture": "failed",
+  "validation": "not-passed",
   "error": "Answer total differs from previous edition by more than 90%",
-  "backfill": false
+  "backfill": false,
+  "build": "not-run",
+  "deployment": "not-configured",
+  "notification": "not-configured",
+  "schedule": "enabled"
 }
