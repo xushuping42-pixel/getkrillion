@@ -1,13 +1,7 @@
 {
   "targetDate": "2026-11-27",
-  "runAt": "2026-11-27T08:20:57.361Z",
-  "capture": "saved",
-  "validation": "passed",
-  "build": "passed",
-  "deployment": "passed",
-  "notification": "not-configured",
-  "schedule": "enabled",
-  "httpStatus": 200,
+  "runAt": "2026-11-27T18:56:06.967Z",
+  "httpStatus": null,
   "promptCount": 7,
   "answerCounts": [
     8291,
@@ -18,11 +12,16 @@
     8236,
     3775
   ],
-  "lastSuccessfulDate": "2026-11-23",
+  "lastSuccessfulDate": "2026-11-27",
   "validationStep": "complete",
-  "rawResponsePrefix": "{\"date\":\"2026-11-27\",\"prompts\":[{\"id\":\"p1\",\"text\":\"Name a fruit that’s fuzzy, hairy, or spiky on the outside\",\"answers\":[{\"answer\":\"Annatto\",\"aliases\":[\"achiote\",\"lipstick tree fruit\",\"Bixa orellana\",\"urucum\",\"roucou\",\"atsuete\",\"achuete\",\"annatto pod\",\"achiote pod\",\"lipstick tree\",\"bija\",\"achiote fruit\",\"onoto\",\"achote\",\"kesumba\",\"lipstick tree pod\",\"lipsticktree\",\"annato\",\"urucu\",\"bixa\",\"annattoes\",\"annatoes\",\"urucums\",\"urucus\",\"lipstick trees\",\"roucous\",\"onotoes\",\"achuetes\",\"atsuetes\",\"bixas\",",
+  "capture": "already-recorded",
+  "validation": "passed",
   "fetchedAt": "2026-11-27T08:20:57.361Z",
   "prompts": 7,
   "answers": 40720,
-  "backfill": false
+  "backfill": false,
+  "build": "not-run",
+  "deployment": "not-configured",
+  "notification": "not-configured",
+  "schedule": "enabled"
 }
