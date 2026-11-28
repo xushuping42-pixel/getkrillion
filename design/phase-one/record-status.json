@@ -1,6 +1,12 @@
 {
   "targetDate": "2026-11-28",
   "runAt": "2026-11-28T10:19:39.595Z",
+  "capture": "failed",
+  "validation": "not-passed",
+  "build": "passed",
+  "deployment": "not-configured",
+  "notification": "not-configured",
+  "schedule": "enabled",
   "httpStatus": 200,
   "promptCount": 7,
   "answerCounts": [
@@ -15,12 +21,6 @@
   "lastSuccessfulDate": "2026-11-27",
   "validationStep": "answer-total",
   "rawResponsePrefix": "{\"date\":\"2026-11-28\",\"prompts\":[{\"id\":\"p1\",\"text\":\"Name a green fruit or vegetable\",\"answers\":[{\"answer\":\"Luffa\",\"aliases\":[\"loofah\",\"patola\",\"Gambas\",\"belustru\",\"oyong\",\"Luffa acutangula (Indonesian)\",\"silk gourd\",\"dishcloth gourd\",\"ketola\",\"buap\",\"loofa\",\"dishrag gourd\",\"gisoda\",\"luffa gourd\",\"tori (ridge gourd)\",\"chinese loofah\",\"ghosala\",\"loffa\",\"luffa gord\",\"luffa guord\",\"sinkwa\",\"towel gourd\",\"vegetable sponge\",\"chinese luffa\",\"estropajo\",\"esponja vegetal\",\"loufa squash\",\"loofah gourd\",\"si",
-  "capture": "failed",
-  "validation": "not-passed",
   "error": "Answer total differs from previous edition by more than 90%",
-  "backfill": false,
-  "build": "not-run",
-  "deployment": "not-configured",
-  "notification": "not-configured",
-  "schedule": "enabled"
+  "backfill": false
 }
